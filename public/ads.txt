@@ -1,0 +1,4 @@
+# ads.txt — Google AdSense publisher file
+# Replace XXXXXXXXXX with your actual AdSense publisher ID when approved.
+# Format: <domain>, <publisher ID>, <relationship>
+# google.com, pub-XXXXXXXXXX, DIRECT, f08c47fec0942fa0

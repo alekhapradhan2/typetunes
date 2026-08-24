@@ -1,0 +1,52 @@
+# TypeTunes (https://typetunes.in)
+> The calm online typing speed test that turns keystrokes into soothing piano music.
+
+## Overview
+TypeTunes is a free, web-based typing speed test and keyboard fluency training platform. Every keystroke triggers a melodic piano note from a harmonized pentatonic scale, helping typists develop smooth motor rhythm, reduce keyboard anxiety, and enter flow state. TypeTunes features comprehensive real-time analytics, keystroke rhythm histograms, anatomical finger error heatmaps, and an interactive Read & Practice library.
+
+- **Domain**: https://typetunes.in
+- **Canonical Non-WWW URL**: https://typetunes.in
+- **Brand Name**: TypeTunes
+- **Access**: 100% Free, No Account / Registration Required, Privacy-First
+
+## Key Pages & Core Features
+- **Homepage / 60s Speed Test**: https://typetunes.in
+  Take the standard 1-minute typing test with real-time WPM, accuracy, and piano feedback.
+- **15-Second Sprint Test**: https://typetunes.in/test/15s
+  High-speed reflex and burst typing speed test.
+- **30-Second Typing Test**: https://typetunes.in/test/30s
+  Short interval WPM test.
+- **2-Minute Endurance Test**: https://typetunes.in/test/120s
+  Test sustained typing speed and stamina.
+- **Word Target Modes**:
+  - 25 Words: https://typetunes.in/test/25w
+  - 50 Words: https://typetunes.in/test/50w
+  - 100 Words: https://typetunes.in/test/100w
+- **Zen Typing Mode**: https://typetunes.in/test/zen
+  Untimed, zero-pressure typing sandbox for flow-state practice and warm-ups.
+- **Typing Speed Games & Action Arcade**: https://typetunes.in/games
+  Free online typing games including Nitro Highway Racer (car racing with nitrous boosts), Cosmic Galaxy Defender (laser space shooter), Boss Battle RPG (monster battles with mana & spells), Falling Notes Arcade, and Sudden Death precision runs.
+- **Programming Typing Practice & Custom Studio**: https://typetunes.in/custom
+  Practice coding typing speed with real code snippets in JavaScript, Python, TypeScript, React, HTML/CSS, and SQL. Drill weak keys, isolate pinky characters, and test custom text.
+- **Quotes Mode**: https://typetunes.in/test/quotes
+  Practice typing classic literature, philosophy, and famous quotes.
+- **FAQ Page**: https://typetunes.in/faq
+  Answers to common questions regarding WPM calculations, average typing speeds, touch typing technique, and audio motor entrainment.
+- **About TypeTunes**: https://typetunes.in/about
+  Design philosophy, acoustic neuro-rhythm rationale, and technology stack.
+- **Typing Practice & Guides Blog**: https://typetunes.in/blog
+  In-depth articles with interactive Read & Practice modes where users can type the actual guide text with audio feedback.
+- **Contact**: https://typetunes.in/contact
+- **Privacy Policy**: https://typetunes.in/privacy-policy
+- **Terms of Service**: https://typetunes.in/terms
+
+## Typing Speed (WPM) Benchmarks & Facts
+- **Standard WPM Calculation**: 1 word is standardized as 5 keystrokes (including spaces and punctuation). Net WPM = Raw WPM - (Uncorrected Errors / Time in Minutes).
+- **Average Typist**: 40 WPM with ~92% accuracy.
+- **Office / Professional Typist**: 55–65 WPM with 95%+ accuracy.
+- **High Velocity / Fast Typist**: 70–90 WPM with 97%+ accuracy.
+- **Expert Typist**: 100–120+ WPM.
+- **Court Reporter / Stenographer**: 225+ WPM (using stenotype systems).
+
+## Audio Mechanics
+TypeTunes utilizes the Web Audio API to synthesize polyphonic piano tones in real time with an ADSR envelope and subtle acoustic reverb. Correct keystrokes cycle across an uplifting pentatonic scale (C, D, E, G, A) ensuring harmonious melodies. Incorrect strokes produce a softer lower-register note, providing gentle feedback without disruptive buzzer sounds.

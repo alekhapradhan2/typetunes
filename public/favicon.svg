@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none">
+  <defs>
+    <linearGradient id="sageGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#76B55C" />
+      <stop offset="100%" stop-color="#4F893A" />
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="1" stdDeviation="0.8" flood-color="#154012" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Background Squircle -->
+  <rect width="32" height="32" rx="8" fill="url(#sageGrad)" />
+  <rect x="0.5" y="0.5" width="31" height="31" rx="7.5" stroke="#FFFFFF" stroke-opacity="0.2" stroke-width="1" />
+
+  <!-- Musical Note Icon with subtle shadow -->
+  <g filter="url(#softShadow)" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Double Note Beam -->
+    <path d="M11 19V10L22 7.5V16.5" />
+    <path d="M11 13.5L22 11" stroke-width="2" />
+    
+    <!-- Left Note Head -->
+    <ellipse cx="8.5" cy="19" rx="2.5" ry="2" fill="#FFFFFF" transform="rotate(-15 8.5 19)" />
+    
+    <!-- Right Note Head -->
+    <ellipse cx="19.5" cy="16.5" rx="2.5" ry="2" fill="#FFFFFF" transform="rotate(-15 19.5 16.5)" />
+  </g>
+</svg>
