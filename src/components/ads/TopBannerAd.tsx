@@ -10,7 +10,7 @@ interface TopBannerAdProps {
 }
 
 export function TopBannerAd({
-  slot = "3815666049",
+  slot = "2610156935",
   className = "",
 }: TopBannerAdProps) {
   const { adLoaded, adUnfilled, insRef, pathname, isMounted } = useAdSense();

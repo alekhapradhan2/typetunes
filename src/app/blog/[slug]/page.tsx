@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Clock, ArrowLeft, ArrowRight, BookOpen, Sparkles, Zap } from 'lucide-react';
 import BlogArticleView from './BlogArticleView';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
-import { InContentAd } from '@/components/ads/InContentAd';
+import { InArticleAd } from '@/components/ads/InArticleAd';
 import { Suspense } from 'react';
 
 interface Props {
@@ -79,11 +79,11 @@ function renderContent(text: string) {
 
     if (line.startsWith('## ')) {
       h2Count++;
-      // Inject an in-content responsive ad after the 2nd major section for readers
+      // Inject an in-article native fluid ad after the 2nd major section for readers
       if (h2Count === 2) {
         elements.push(
           <div key={`in-article-ad-${i}`} className="my-6">
-            <InContentAd />
+            <InArticleAd />
           </div>
         );
       }
@@ -252,8 +252,8 @@ export default async function BlogPostPage({ params }: Props) {
     <>
       <div className="prose-like">{renderContent(post.content)}</div>
 
-      {/* Middle Page In-Content Banner Ad */}
-      <InContentAd className="my-6" />
+      {/* Bottom of Article Native Ad */}
+      <InArticleAd className="my-6" />
 
       {/* CTA Box with direct links to practice & test modes */}
       <div className="card p-6 mt-8 text-center bg-gradient-to-r from-cream-light/80 to-white dark:from-slate-900 dark:to-slate-950 border border-slate-200 dark:border-slate-800">

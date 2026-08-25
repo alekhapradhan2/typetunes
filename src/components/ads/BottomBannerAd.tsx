@@ -10,7 +10,7 @@ interface BottomBannerAdProps {
 }
 
 export function BottomBannerAd({
-  slot = "3815666049",
+  slot = "5969646587",
   className = "",
 }: BottomBannerAdProps) {
   const { adLoaded, adUnfilled, insRef, pathname, isMounted } = useAdSense();

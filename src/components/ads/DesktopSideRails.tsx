@@ -34,7 +34,7 @@ function SingleRailAd({ side, slot }: RailAdProps) {
             className="adsbygoogle"
             style={{ display: "inline-block", width: "100%", height: "600px" }}
             data-ad-client={AD_CLIENT}
-            data-ad-slot={slot || "3815666049"}
+            data-ad-slot={slot || (side === "left" ? "8431068054" : "2932419707")}
             data-ad-format="vertical"
           />
         )}

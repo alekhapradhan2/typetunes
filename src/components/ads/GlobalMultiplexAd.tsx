@@ -3,8 +3,8 @@
 import { useAdSense } from "@/hooks/useAdSense";
 
 const AD_CLIENT = "ca-pub-5823659147566885";
-// Multiplex ad slot — same as Ollypedia's GlobalMultiplexAd
-const AD_SLOT = "8191172163";
+// Multiplex ad slot — matching 'Global Multipllex' unit in Google AdSense
+const AD_SLOT = "3548072735";
 
 /**
  * GlobalMultiplexAd — auto-format multiplex ad that sits at the

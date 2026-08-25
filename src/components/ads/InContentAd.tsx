@@ -11,7 +11,7 @@ interface InContentAdProps {
 }
 
 export function InContentAd({
-  slot = "3815666049",
+  slot = "8191172163",
   className = "",
   format = "auto",
 }: InContentAdProps) {
