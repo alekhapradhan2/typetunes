@@ -22,6 +22,7 @@ interface NitroRacerProps {
   multiplayerRoom?: MultiplayerRoom | null;
   currentPlayerId?: string;
   onSyncProgress?: (progress: number, wpm: number, accuracy: number, isFinished: boolean) => void;
+  onExitGame?: () => void;
   externalText?: string;
   autoStart?: boolean;
 }
@@ -48,6 +49,7 @@ export default function NitroRacerGame({
   multiplayerRoom,
   currentPlayerId,
   onSyncProgress,
+  onExitGame,
   externalText,
   autoStart = false,
 }: NitroRacerProps = {}) {
@@ -87,7 +89,7 @@ export default function NitroRacerGame({
 
   const totalWordsInRace = 35;
 
-  // Initialize Race
+  // Initialize Race (Called once per game start, NOT on every sync!)
   const initRace = useCallback(() => {
     let fullText = '';
     if (multiplayerRoom?.text) {
@@ -138,11 +140,20 @@ export default function NitroRacerGame({
       }));
       setRivals(initial);
     }
-  }, [difficulty, multiplayerRoom, currentPlayerId, externalText]);
+  }, [difficulty, externalText]); // DO NOT include multiplayerRoom to avoid wiping typed state on live progress sync!
 
+  // Initial load
   useEffect(() => {
     initRace();
-  }, [initRace]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Update text when multiplayer room assigns text in lobby
+  useEffect(() => {
+    if (multiplayerRoom?.text && gameState === 'idle') {
+      setRaceText(multiplayerRoom.text);
+    }
+  }, [multiplayerRoom?.text, gameState]);
 
   // Sync multiplayer player positions & live WPM
   useEffect(() => {
@@ -963,13 +974,23 @@ export default function NitroRacerGame({
               ))}
             </div>
 
-            <button
-              onClick={startRace}
-              className="px-8 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-sm transition-all shadow-lg flex items-center gap-2 cursor-pointer"
-            >
-              <RotateCcw size={18} />
-              Race Again (Enter)
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={startRace}
+                className="px-6 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-sm transition-all shadow-lg flex items-center gap-2 cursor-pointer"
+              >
+                <RotateCcw size={16} />
+                Race Again (Enter)
+              </button>
+              {onExitGame && (
+                <button
+                  onClick={onExitGame}
+                  className="px-6 py-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm transition-all border border-slate-700 cursor-pointer"
+                >
+                  Exit to Lobby
+                </button>
+              )}
+            </div>
           </div>
         )}
 

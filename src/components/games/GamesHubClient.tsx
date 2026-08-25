@@ -251,26 +251,28 @@ export default function GamesHubClient() {
         const data = await res.json();
         if (data.room) {
           setRoom(data.room);
-
-          // Auto-fullscreen for ALL connected players when match starts
-          if (data.room.status === 'countdown' || data.room.status === 'playing') {
-            setIsFullscreen(true);
+          if (data.room.status === 'playing' && room.status === 'lobby') {
+            setCountdown(3);
+            let c = 3;
+            const cdInterval = setInterval(() => {
+              c -= 1;
+              if (c <= 0) {
+                clearInterval(cdInterval);
+                setCountdown(null);
+              } else {
+                setCountdown(c);
+              }
+            }, 800);
           }
-
-          // Handle synchronized countdown
-          if (data.room.status === 'countdown' && data.room.countdownStartTime) {
-            const elapsed = (Date.now() - data.room.countdownStartTime) / 1000;
-            const remaining = Math.max(0, Math.ceil(3.5 - elapsed));
-            setCountdown(remaining);
-          } else {
-            setCountdown(null);
-          }
+        } else {
+          // Room closed by host or expired
+          handleLeaveRoom();
         }
       } catch {}
     }, 450);
 
     return () => clearInterval(interval);
-  }, [room?.code, playerId]);
+  }, [room?.code, playerId, room?.status]);
 
   // Handle URL room param on load (e.g. /games?room=SPEED-31)
   useEffect(() => {
@@ -328,8 +330,12 @@ export default function GamesHubClient() {
     } catch {}
   };
 
-  // Leave room
+  // Leave room & clean up fullscreen
   const handleLeaveRoom = () => {
+    if (typeof document !== 'undefined' && document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
+    setIsFullscreen(false);
     setRoom(null);
     setPlayerId('');
     setCountdown(null);
@@ -561,28 +567,40 @@ export default function GamesHubClient() {
             </div>
           </div>
 
-          {/* Full Screen Toggle Button */}
-          <button
-            onClick={toggleFullscreen}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all shadow-2xs cursor-pointer ${
-              isFullscreen
-                ? 'bg-rose-500 hover:bg-rose-600 text-white shadow-md'
-                : 'bg-slate-900 hover:bg-slate-800 text-white'
-            }`}
-            title={isFullscreen ? 'Exit Full Screen (Esc)' : 'Play Game in Full Screen'}
-          >
-            {isFullscreen ? (
-              <>
-                <Minimize2 size={14} />
-                <span>Exit Fullscreen</span>
-              </>
-            ) : (
-              <>
-                <Maximize2 size={14} />
-                <span>Full Screen ⛶</span>
-              </>
+          <div className="flex items-center gap-2">
+            {room && (
+              <button
+                onClick={handleLeaveRoom}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-rose-100 text-rose-700 hover:bg-rose-200 border border-rose-200 transition-all cursor-pointer"
+                title="Leave match and return to lobby"
+              >
+                <span>Leave Room</span>
+              </button>
             )}
-          </button>
+
+            {/* Full Screen Toggle Button */}
+            <button
+              onClick={toggleFullscreen}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all shadow-2xs cursor-pointer ${
+                isFullscreen
+                  ? 'bg-rose-500 hover:bg-rose-600 text-white shadow-md'
+                  : 'bg-slate-900 hover:bg-slate-800 text-white'
+              }`}
+              title={isFullscreen ? 'Exit Full Screen (Esc)' : 'Play Game in Full Screen'}
+            >
+              {isFullscreen ? (
+                <>
+                  <Minimize2 size={14} />
+                  <span>Exit Fullscreen</span>
+                </>
+              ) : (
+                <>
+                  <Maximize2 size={14} />
+                  <span>Full Screen ⛶</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Synchronized Match Countdown Overlay */}
@@ -604,6 +622,7 @@ export default function GamesHubClient() {
               multiplayerRoom={room}
               currentPlayerId={playerId}
               onSyncProgress={handleSyncProgress}
+              onExitGame={handleLeaveRoom}
               autoStart={room?.status === 'playing'}
             />
           )}

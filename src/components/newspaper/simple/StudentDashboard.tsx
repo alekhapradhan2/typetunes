@@ -36,16 +36,16 @@ export default function StudentDashboard({
   return (
     <div className="w-full max-w-7xl mx-auto space-y-8 py-2">
       {/* Top Welcome Bar */}
-      <div className="card p-6 sm:p-8 bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 text-white rounded-3xl shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
+      <div className="p-6 sm:p-8 bg-gradient-to-r from-slate-900 via-amber-950 to-slate-900 border border-amber-500/30 text-white rounded-3xl shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
         <div className="space-y-1.5 z-10">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-white text-xs font-bold uppercase tracking-wider backdrop-blur-md">
-            <Sparkles size={13} />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-bold uppercase tracking-wider backdrop-blur-md">
+            <Sparkles size={13} className="text-amber-400" />
             <span>Student Newsroom Workspace</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white" style={{ fontFamily: 'var(--font-display)' }}>
             My Newspapers
           </h2>
-          <p className="text-amber-100 text-xs sm:text-sm max-w-xl">
+          <p className="text-slate-300 text-xs sm:text-sm max-w-xl leading-relaxed">
             Manage your newspaper editions, resume editing drafts, duplicate existing broadsheets, or publish new front pages.
           </p>
         </div>

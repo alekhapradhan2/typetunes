@@ -21,6 +21,7 @@ import {
   Flame,
 } from 'lucide-react';
 import CustomizeSoundsNav from '@/components/audio/CustomizeSoundsNav';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 interface NavItem {
   href: string;
@@ -111,7 +112,7 @@ export default function NavBar() {
   const isMoreActive = MORE_LINKS.some((l) => pathname === l.href);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-stone-200/70 bg-cream/90 backdrop-blur-xl shadow-[0_1px_15px_-4px_rgba(0,0,0,0.03)] transition-all duration-200">
+    <header className="sticky top-0 z-50 w-full border-b border-stone-200/70 dark:border-slate-800 bg-cream/90 dark:bg-slate-950/90 backdrop-blur-xl shadow-[0_1px_15px_-4px_rgba(0,0,0,0.03)] transition-all duration-200">
       <nav
         className="w-full px-3 sm:px-6 lg:px-8 xl:px-10 py-1.5 flex items-center justify-between"
         aria-label="Main navigation"
@@ -128,16 +129,16 @@ export default function NavBar() {
                 <circle cx="9.5" cy="14.5" r="3.2" />
                 <path d="M12.7 14.5 V5.5 L19.5 9" />
               </svg>
-              <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-teal-300 border-2 border-cream ring-1 ring-emerald-600/30 animate-pulse" />
+              <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-teal-300 border-2 border-cream dark:border-slate-900 ring-1 ring-emerald-600/30 animate-pulse" />
             </div>
             <div className="flex flex-col">
               <span
-                className="text-lg font-bold tracking-tight text-slate-800 leading-none group-hover:text-sage-700 transition-colors"
+                className="text-lg font-bold tracking-tight text-slate-800 dark:text-white leading-none group-hover:text-sage-700 dark:group-hover:text-sage-400 transition-colors"
                 style={{ fontFamily: 'var(--font-display)' }}
               >
                 Typetune
               </span>
-              <span className="text-[9px] font-medium text-sage-600 tracking-wider uppercase mt-0.5">
+              <span className="text-[9px] font-medium text-sage-600 dark:text-sage-400 tracking-wider uppercase mt-0.5">
                 Musical Typing
               </span>
             </div>
@@ -145,7 +146,7 @@ export default function NavBar() {
         </div>
 
         {/* Center: Desktop Navigation Bar */}
-        <div className="hidden lg:flex items-center gap-1 xl:gap-1.5 p-0.5 rounded-xl bg-stone-200/40 border border-stone-200/60 backdrop-blur-sm">
+        <div className="hidden lg:flex items-center gap-1 xl:gap-1.5 p-0.5 rounded-xl bg-stone-200/40 dark:bg-slate-900/80 border border-stone-200/60 dark:border-slate-800 backdrop-blur-sm">
           {PRIMARY_LINKS.map((link) => {
             const Icon = link.icon;
             const isActive =
@@ -159,14 +160,14 @@ export default function NavBar() {
                 href={link.href}
                 className={`relative flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs xl:text-sm font-semibold transition-all duration-200 whitespace-nowrap ${
                   isActive
-                    ? 'bg-white text-sage-800 shadow-xs border border-stone-200/80 font-bold'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                    ? 'bg-white dark:bg-slate-800 text-sage-800 dark:text-sage-300 shadow-xs border border-stone-200/80 dark:border-slate-700 font-bold'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/60'
                 }`}
               >
                 <Icon
                   size={13}
                   className={`transition-colors shrink-0 ${
-                    isActive ? 'text-sage-600' : 'text-slate-400'
+                    isActive ? 'text-sage-600 dark:text-sage-400' : 'text-slate-400 dark:text-slate-500'
                   }`}
                 />
                 <span>{link.label}</span>
@@ -175,10 +176,10 @@ export default function NavBar() {
                   <span
                     className={`text-[8px] font-bold px-1.5 py-0.2 rounded-full border uppercase tracking-wider ${
                       link.badgeType === 'new'
-                        ? 'bg-amber-100/80 text-amber-700 border-amber-200/80'
+                        ? 'bg-amber-100/80 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border-amber-200/80 dark:border-amber-700/50'
                         : link.badgeType === 'count'
-                        ? 'bg-purple-100/80 text-purple-700 border-purple-200/80'
-                        : 'bg-sky-100/80 text-sky-700 border-sky-200/80'
+                        ? 'bg-purple-100/80 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border-purple-200/80 dark:border-purple-700/50'
+                        : 'bg-sky-100/80 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300 border-sky-200/80 dark:border-sky-700/50'
                     }`}
                   >
                     {link.badge}
@@ -194,21 +195,21 @@ export default function NavBar() {
               onClick={() => setMoreOpen((v) => !v)}
               className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs xl:text-sm font-semibold transition-all duration-200 cursor-pointer ${
                 isMoreActive || moreOpen
-                  ? 'bg-white text-sage-800 shadow-xs border border-stone-200/80'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                  ? 'bg-white dark:bg-slate-800 text-sage-800 dark:text-sage-300 shadow-xs border border-stone-200/80 dark:border-slate-700'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/60'
               }`}
             >
               <span>More</span>
               <ChevronDown
                 size={12}
                 className={`transition-transform duration-200 ${
-                  moreOpen ? 'rotate-180 text-sage-600' : 'text-slate-400'
+                  moreOpen ? 'rotate-180 text-sage-600 dark:text-sage-400' : 'text-slate-400 dark:text-slate-500'
                 }`}
               />
             </button>
 
             {moreOpen && (
-              <div className="absolute right-0 top-full mt-1.5 w-56 bg-white/98 backdrop-blur-xl rounded-2xl border border-stone-200/90 shadow-2xl p-1.5 z-50 animate-scale-in space-y-0.5">
+              <div className="absolute right-0 top-full mt-1.5 w-56 bg-white/98 dark:bg-slate-900/98 backdrop-blur-xl rounded-2xl border border-stone-200/90 dark:border-slate-800 shadow-2xl p-1.5 z-50 animate-scale-in space-y-0.5">
                 {MORE_LINKS.map((item) => {
                   const ItemIcon = item.icon;
                   const isActive = pathname === item.href;
@@ -219,16 +220,16 @@ export default function NavBar() {
                       href={item.href}
                       className={`flex items-center gap-2.5 p-2 rounded-xl text-xs transition-all ${
                         isActive
-                          ? 'bg-sage-50 text-sage-900 font-bold'
-                          : 'text-slate-600 hover:bg-stone-50 hover:text-slate-900'
+                          ? 'bg-sage-50 dark:bg-sage-950/60 text-sage-900 dark:text-sage-200 font-bold'
+                          : 'text-slate-600 dark:text-slate-300 hover:bg-stone-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
                       }`}
                     >
-                      <div className="p-1.5 rounded-lg bg-stone-100 text-slate-600 shrink-0">
+                      <div className="p-1.5 rounded-lg bg-stone-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shrink-0">
                         <ItemIcon size={14} />
                       </div>
                       <div className="truncate">
-                        <div className="font-semibold text-slate-800 leading-tight">{item.label}</div>
-                        <div className="text-[10px] text-slate-400 font-normal truncate mt-0.5">
+                        <div className="font-semibold text-slate-800 dark:text-white leading-tight">{item.label}</div>
+                        <div className="text-[10px] text-slate-400 dark:text-slate-500 font-normal truncate mt-0.5">
                           {item.description}
                         </div>
                       </div>
@@ -240,9 +241,10 @@ export default function NavBar() {
           </div>
         </div>
 
-        {/* Right: Audio Synthesizer & Quick Action CTA */}
+        {/* Right: Audio Synthesizer & Theme Toggle & Quick Action CTA */}
         <div className="hidden sm:flex items-center gap-2 shrink-0">
           <CustomizeSoundsNav />
+          <ThemeToggle />
 
           <Link
             href="/test/60s"
@@ -253,14 +255,15 @@ export default function NavBar() {
           </Link>
         </div>
 
-        {/* Mobile menu button */}
+        {/* Mobile menu button & Theme toggle */}
         <div className="flex items-center gap-2 lg:hidden">
           <div className="sm:hidden">
             <CustomizeSoundsNav />
           </div>
+          <ThemeToggle />
 
           <button
-            className="rounded-xl p-2 text-slate-600 hover:text-slate-900 bg-white/80 hover:bg-white border border-stone-200/80 shadow-2xs transition-all cursor-pointer"
+            className="rounded-xl p-2 text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-white/80 dark:bg-slate-800 hover:bg-white dark:hover:bg-slate-700 border border-stone-200/80 dark:border-slate-700 shadow-2xs transition-all cursor-pointer"
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
