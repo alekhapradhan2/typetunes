@@ -7,9 +7,9 @@ export async function POST(req: NextRequest) {
     const file = formData.get('file') as File | null;
     const base64Data = formData.get('base64') as string | null;
 
-    const cloudName = process.env.CLOUDINARY_CLOUD_NAME || 'ub0f4fjq';
-    const apiKey = process.env.CLOUDINARY_API_KEY || '533779233825354';
-    const apiSecret = process.env.CLOUDINARY_API_SECRET || '5vN5kMKqB4HOVW0S4ZrgRl5nmqo';
+    const cloudName = process.env.CLOUDINARY_CLOUD_NAME || 'ugycrdps';
+    const apiKey = process.env.CLOUDINARY_API_KEY || '622877224394382';
+    const apiSecret = process.env.CLOUDINARY_API_SECRET || 'WeuUsXuVoUK8-JsuYITOWydQZSo';
 
     if (!file && !base64Data) {
       return NextResponse.json({ error: 'No image file provided' }, { status: 400 });
