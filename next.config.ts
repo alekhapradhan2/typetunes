@@ -44,25 +44,25 @@ const nextConfig: NextConfig = {
         destination: 'https://typetune.ollypedia.in/:path*',
         permanent: true,
       },
-      // 301 Redirect legacy typetune.ollypedia.com to canonical typetune.ollypedia.in
+      // 301 Redirect legacy typetune.ollypedia.in to canonical typetune.ollypedia.in
       {
         source: '/:path*',
         has: [
           {
             type: 'host',
-            value: 'typetune.ollypedia.com',
+            value: 'typetune.ollypedia.in',
           },
         ],
         destination: 'https://typetune.ollypedia.in/:path*',
         permanent: true,
       },
-      // 301 Redirect legacy www.typetune.ollypedia.com to canonical typetune.ollypedia.in
+      // 301 Redirect legacy www.typetune.ollypedia.in to canonical typetune.ollypedia.in
       {
         source: '/:path*',
         has: [
           {
             type: 'host',
-            value: 'www.typetune.ollypedia.com',
+            value: 'www.typetune.ollypedia.in',
           },
         ],
         destination: 'https://typetune.ollypedia.in/:path*',
