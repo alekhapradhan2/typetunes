@@ -8,6 +8,9 @@ import NavBar from '@/components/ui/NavBar';
 import Footer from '@/components/ui/Footer';
 import Script from 'next/script';
 import { GlobalMultiplexWrapper } from '@/components/ads/GlobalMultiplexWrapper';
+import { TopBannerAd } from '@/components/ads/TopBannerAd';
+import { BottomBannerAd } from '@/components/ads/BottomBannerAd';
+import { DesktopSideRails } from '@/components/ads/DesktopSideRails';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -105,32 +108,18 @@ export default function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
       <head>
-        <Script
-          id="theme-init"
-          strategy="beforeInteractive"
+        <script
+          suppressHydrationWarning
           dangerouslySetInnerHTML={{
-            __html: `(function() {
-              try {
-                var theme = localStorage.getItem('theme');
-                if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                  document.documentElement.classList.add('dark');
-                  document.documentElement.setAttribute('data-theme', 'dark');
-                } else {
-                  document.documentElement.classList.remove('dark');
-                  document.documentElement.setAttribute('data-theme', 'light');
-                }
-              } catch(e) {}
-            })()`,
+            __html: `try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');document.documentElement.setAttribute('data-theme','dark')}else{document.documentElement.classList.remove('dark');document.documentElement.setAttribute('data-theme','light')}}catch(e){}`,
           }}
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <Script
-          id="adsense-init"
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5823659147566885"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
         />
         <link
           href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..800&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Pirata+One&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Special+Elite&family=UnifrakturCook:wght@700&family=UnifrakturMaguntia&display=swap"
@@ -139,9 +128,12 @@ export default function RootLayout({
       </head>
       <body className="bg-cream text-slate-700 antialiased min-h-screen flex flex-col">
         <NavBar />
+        <TopBannerAd />
+        <DesktopSideRails />
         <main id="main-content" className="flex-1">
           {children}
         </main>
+        <BottomBannerAd />
         <GlobalMultiplexWrapper />
         <Footer />
       </body>

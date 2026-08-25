@@ -2,25 +2,27 @@ import type { Metadata } from 'next';
 import TypingTest from '@/components/typing/TypingTest';
 import { BLOG_POSTS } from '@/data/blog-posts';
 import {
+  Keyboard,
   Music2,
   Zap,
   BarChart3,
   Heart,
+  Gamepad2,
+  Sparkles,
   BookOpen,
-  Keyboard,
+  HelpCircle,
+  Newspaper,
+  Terminal,
+  Trophy,
+  CheckCircle2,
+  Share2,
   ArrowRight,
   Clock,
-  HelpCircle,
-  Sparkles,
-  Gamepad2,
   Users,
   PenTool,
-  Newspaper,
   GraduationCap,
-  Trophy,
-  Layers,
-  CheckCircle2,
 } from 'lucide-react';
+import { InContentAd } from '@/components/ads/InContentAd';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -260,28 +262,28 @@ export default function HomePage() {
 
         {/* Quick Test Modes Interlink Grid */}
         <section className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-12 py-6">
-          <div className="card p-6 sm:p-8 bg-gradient-to-r from-cream-light/60 to-white border border-slate-200 shadow-sm">
+          <div className="card p-6 sm:p-8 bg-gradient-to-r from-cream-light/60 to-white dark:from-slate-900 dark:to-slate-950 border border-slate-200 dark:border-slate-800 shadow-sm">
             <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
               <h2
-                className="text-lg font-bold text-slate-800 flex items-center gap-2"
+                className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2"
                 style={{ fontFamily: 'var(--font-display)' }}
               >
-                <Zap size={18} className="text-sage-600" />
+                <Zap size={18} className="text-sage-600 dark:text-sage-400" />
                 Explore Typing Speed Test Modes
               </h2>
-              <span className="text-xs text-slate-400 font-medium">Standard WPM benchmarks, word targets & zen modes</span>
+              <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">Standard WPM benchmarks, word targets & zen modes</span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-9 gap-2.5">
               {testModes.map((tm) => (
                 <Link
                   key={tm.slug}
                   href={`/test/${tm.slug}`}
-                  className="p-3 rounded-xl bg-white border border-slate-200/80 hover:border-sage-400 hover:shadow-md transition-all text-center group transform hover:-translate-y-0.5"
+                  className="p-3 rounded-xl bg-white dark:bg-slate-850 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 hover:border-sage-400 dark:hover:border-sage-500 hover:shadow-md transition-all text-center group transform hover:-translate-y-0.5"
                 >
-                  <div className="font-bold text-xs sm:text-sm text-slate-700 group-hover:text-sage-700">
+                  <div className="font-bold text-xs sm:text-sm text-slate-700 dark:text-slate-200 group-hover:text-sage-700 dark:group-hover:text-sage-300">
                     {tm.label}
                   </div>
-                  <div className="text-[10px] text-slate-400 mt-0.5">{tm.desc}</div>
+                  <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">{tm.desc}</div>
                 </Link>
               ))}
             </div>
@@ -290,19 +292,19 @@ export default function HomePage() {
 
         {/* Section: What is Typetune? */}
         <section className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-12 py-12">
-          <div className="card p-8 sm:p-12 border border-slate-200 bg-white shadow-sm">
+          <div className="card p-8 sm:p-12 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
             <div className="max-w-3xl mb-8">
               <span className="chip mb-3 inline-flex">
                 <Sparkles size={11} className="mr-1" />
                 Platform Overview
               </span>
               <h2
-                className="text-3xl sm:text-4xl font-bold text-slate-800 mb-4"
+                className="text-3xl sm:text-4xl font-bold text-slate-800 dark:text-white mb-4"
                 style={{ fontFamily: 'var(--font-display)' }}
               >
                 What is Typetune?
               </h2>
-              <p className="text-slate-600 leading-relaxed text-base sm:text-lg">
+              <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-base sm:text-lg">
                 Typetune is a modern, student-centered touch typing and keyboard fluency ecosystem.
                 Unlike traditional typing software with harsh buzzers and stressful timers, Typetune
                 integrates harmonious acoustic piano sound synthesis powered by the Web Audio API.
@@ -312,39 +314,39 @@ export default function HomePage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-6 rounded-2xl bg-sage-50/70 border border-sage-200/60">
+              <div className="p-6 rounded-2xl bg-sage-50/70 dark:bg-slate-800/70 border border-sage-200/60 dark:border-slate-700/60">
                 <div className="w-10 h-10 rounded-xl bg-sage-500 text-white flex items-center justify-center mb-4">
                   <Keyboard size={20} />
                 </div>
-                <h3 className="text-lg font-bold text-slate-800 mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+                <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>
                   Practice & Benchmark Speed
                 </h3>
-                <p className="text-sm text-slate-600 leading-relaxed">
+                <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                   Take accurate 15s, 30s, 60s, and 2-minute typing tests with live net WPM, accuracy %, and finger error diagnostics.
                 </p>
               </div>
 
-              <div className="p-6 rounded-2xl bg-purple-50/70 border border-purple-200/60">
+              <div className="p-6 rounded-2xl bg-purple-50/70 dark:bg-slate-800/70 border border-purple-200/60 dark:border-slate-700/60">
                 <div className="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center mb-4">
                   <Gamepad2 size={20} />
                 </div>
-                <h3 className="text-lg font-bold text-slate-800 mb-2" style={{ fontFamily: 'var(--font-display)' }}>
-                  Educational Typing Games
+                <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+                  Arcade Games & Multiplayer
                 </h3>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  Race sports cars in Nitro Highway Racer, battle alien invaders in space, and defeat monster RPG bosses with speed typing.
+                <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Race live against classmates with Nitro Highway Racer, defend galaxies, and defeat bosses in 10 action-packed typing games.
                 </p>
               </div>
 
-              <div className="p-6 rounded-2xl bg-amber-50/70 border border-amber-200/60">
-                <div className="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center mb-4">
-                  <Newspaper size={20} />
+              <div className="p-6 rounded-2xl bg-sky-50/70 dark:bg-slate-800/70 border border-sky-200/60 dark:border-slate-700/60">
+                <div className="w-10 h-10 rounded-xl bg-sky-500 text-white flex items-center justify-center mb-4">
+                  <BookOpen size={20} />
                 </div>
-                <h3 className="text-lg font-bold text-slate-800 mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+                <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>
                   Newspaper Studio for Students
                 </h3>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  Design authentic vintage broadsheets and school newspapers with headlines, columns, halftone photos, and PDF downloads.
+                <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Type real-world journalistic stories and download authentic multi-column vintage broadsheet PDFs for classroom portfolios.
                 </p>
               </div>
             </div>
@@ -427,6 +429,11 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* Middle Page In-Content Banner Ad */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
+          <InContentAd slot="8392104825" />
+        </div>
 
         {/* Featured Arcade & Action Typing Games Showcase */}
         <section className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-12 py-10">

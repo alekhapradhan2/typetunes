@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useMemo } from 'react';
 import type { BlogPost } from '@/lib/types';
 import Link from 'next/link';

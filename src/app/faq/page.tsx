@@ -1,7 +1,9 @@
+import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { ArrowRight, BookOpen, Zap } from 'lucide-react';
+import { InContentAd } from '@/components/ads/InContentAd';
 
 export const metadata: Metadata = {
   title: 'Typing Speed FAQ & Touch Typing Guide',
@@ -134,34 +136,41 @@ export default function FaqPage() {
 
           <div className="space-y-4">
             {FAQS.map((faq, i) => (
-              <details
-                key={i}
-                className="card p-0 overflow-hidden group border border-slate-200/80 dark:border-slate-800 bg-white/80 dark:bg-slate-900/90"
-              >
-                <summary
-                  className="flex items-center justify-between p-6 cursor-pointer font-semibold text-slate-800 dark:text-white hover:text-sage-700 dark:hover:text-sage-300 transition-colors list-none"
-                  style={{ fontFamily: 'var(--font-display)' }}
+              <React.Fragment key={i}>
+                <details
+                  className="card p-0 overflow-hidden group border border-slate-200/80 dark:border-slate-800 bg-white/80 dark:bg-slate-900/90"
                 >
-                  <span className="text-base">{faq.q}</span>
-                  <span className="text-slate-400 dark:text-slate-400 group-open:rotate-45 transition-transform duration-200 ml-4 flex-shrink-0 text-xl font-bold">
-                    +
-                  </span>
-                </summary>
-                <div className="px-6 pb-6 -mt-2">
-                  <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm">{faq.a}</p>
-                  {faq.guideLink && (
-                    <div className="mt-3 pt-2 border-t border-slate-100 dark:border-slate-800">
-                      <Link
-                        href={faq.guideLink}
-                        className="text-xs font-semibold text-sage-600 dark:text-sage-400 hover:underline inline-flex items-center gap-1"
-                      >
-                        <BookOpen size={12} />
-                        {faq.guideLabel}
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              </details>
+                  <summary
+                    className="flex items-center justify-between p-6 cursor-pointer font-semibold text-slate-800 dark:text-white hover:text-sage-700 dark:hover:text-sage-300 transition-colors list-none"
+                    style={{ fontFamily: 'var(--font-display)' }}
+                  >
+                    <span className="text-base">{faq.q}</span>
+                    <span className="text-slate-400 dark:text-slate-400 group-open:rotate-45 transition-transform duration-200 ml-4 flex-shrink-0 text-xl font-bold">
+                      +
+                    </span>
+                  </summary>
+                  <div className="px-6 pb-6 -mt-2">
+                    <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm">{faq.a}</p>
+                    {faq.guideLink && (
+                      <div className="mt-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+                        <Link
+                          href={faq.guideLink}
+                          className="text-xs font-semibold text-sage-600 dark:text-sage-400 hover:underline inline-flex items-center gap-1"
+                        >
+                          <BookOpen size={12} />
+                          {faq.guideLabel}
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                </details>
+
+                {i === 4 && (
+                  <div className="py-2">
+                    <InContentAd slot="8392104827" />
+                  </div>
+                )}
+              </React.Fragment>
             ))}
           </div>
 

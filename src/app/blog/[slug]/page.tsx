@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Clock, ArrowLeft, ArrowRight, BookOpen, Sparkles, Zap } from 'lucide-react';
 import BlogArticleView from './BlogArticleView';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { InContentAd } from '@/components/ads/InContentAd';
 import { Suspense } from 'react';
 
 interface Props {
@@ -240,8 +241,11 @@ export default async function BlogPostPage({ params }: Props) {
     <>
       <div className="prose-like">{renderContent(post.content)}</div>
 
+      {/* Middle Page In-Content Banner Ad */}
+      <InContentAd slot="8392104829" className="my-6" />
+
       {/* CTA Box with direct links to practice & test modes */}
-      <div className="card p-6 mt-12 text-center bg-gradient-to-r from-cream-light/80 to-white border border-slate-200">
+      <div className="card p-6 mt-8 text-center bg-gradient-to-r from-cream-light/80 to-white dark:from-slate-900 dark:to-slate-950 border border-slate-200 dark:border-slate-800">
         <h3
           className="text-lg font-bold text-slate-800 mb-2"
           style={{ fontFamily: 'var(--font-display)' }}

@@ -29,11 +29,11 @@ export default function TextDisplay({ charStates, cursorIndex }: TextDisplayProp
   return (
     <div
       ref={containerRef}
-      className="relative select-none overflow-hidden rounded-xl bg-white/40 p-3 sm:p-4 border border-cream-dark/40"
+      className="relative select-none overflow-hidden rounded-2xl bg-stone-100/60 dark:bg-slate-900/80 p-4 sm:p-5 border border-stone-200/80 dark:border-slate-800"
       style={{
         height: `${LINE_HEIGHT_PX * 3 + 16}px`, // 3 visible lines + padding
-        maskImage: 'linear-gradient(to bottom, black 75%, transparent 100%)',
-        WebkitMaskImage: 'linear-gradient(to bottom, black 75%, transparent 100%)',
+        maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
+        WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
       }}
       aria-label="Test text"
       aria-live="off"

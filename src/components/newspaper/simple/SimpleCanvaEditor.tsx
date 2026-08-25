@@ -53,6 +53,10 @@ import {
   Maximize,
   PanelLeftClose,
   PanelLeftOpen,
+  Keyboard,
+  Scissors,
+  Clipboard,
+  Command,
 } from 'lucide-react';
 
 interface SimpleCanvaEditorProps {
@@ -149,26 +153,303 @@ export default function SimpleCanvaEditor({
     return () => clearTimeout(timer);
   }, [project]);
 
-  const updateProjectState = (newProj: NewspaperProject) => {
+  // Clipboard & Keyboard Shortcut Modal States
+  const [clipboardElement, setClipboardElement] = useState<CanvasElement | null>(null);
+  const [showShortcutsModal, setShowShortcutsModal] = useState(false);
+  const [shortcutFeedback, setShortcutFeedback] = useState<string | null>(null);
+
+  const triggerFeedback = useCallback((message: string) => {
+    setShortcutFeedback(message);
+    setTimeout(() => {
+      setShortcutFeedback((prev) => (prev === message ? null : prev));
+    }, 2000);
+  }, []);
+
+  const updateProjectState = useCallback((newProj: NewspaperProject) => {
     setProject(newProj);
-    const newHistory = history.slice(0, historyIndex + 1);
-    setHistory([...newHistory, newProj]);
-    setHistoryIndex(newHistory.length);
-  };
+    setHistory((prevHistory) => {
+      const newHistory = prevHistory.slice(0, historyIndex + 1);
+      return [...newHistory, newProj];
+    });
+    setHistoryIndex((prev) => prev + 1);
+  }, [historyIndex]);
 
-  const handleUndo = () => {
+  const handleUndo = useCallback(() => {
     if (historyIndex > 0) {
-      setHistoryIndex(historyIndex - 1);
-      setProject(history[historyIndex - 1]);
+      const nextIndex = historyIndex - 1;
+      setHistoryIndex(nextIndex);
+      setProject(history[nextIndex]);
+      triggerFeedback('↩ Undo (Ctrl+Z)');
     }
-  };
+  }, [historyIndex, history, triggerFeedback]);
 
-  const handleRedo = () => {
+  const handleRedo = useCallback(() => {
     if (historyIndex < history.length - 1) {
-      setHistoryIndex(historyIndex + 1);
-      setProject(history[historyIndex + 1]);
+      const nextIndex = historyIndex + 1;
+      setHistoryIndex(nextIndex);
+      setProject(history[nextIndex]);
+      triggerFeedback('↪ Redo (Ctrl+Y)');
     }
-  };
+  }, [historyIndex, history, triggerFeedback]);
+
+  const handleDeleteElement = useCallback((id: string) => {
+    setProject((prevProject) => {
+      const updatedPages = prevProject.pages.map((p, idx) => {
+        if (idx !== activePageIndex) return p;
+        return { ...p, elements: p.elements.filter((el) => el.id !== id) };
+      });
+      const newProj = { ...prevProject, pages: updatedPages };
+      saveSingleProject(newProj);
+      return newProj;
+    });
+    setSelectedElementId(null);
+    triggerFeedback('🗑 Deleted element (Del)');
+  }, [activePageIndex, triggerFeedback]);
+
+  const handleDuplicateElement = useCallback((id: string) => {
+    const page = project.pages[activePageIndex] || project.pages[0];
+    const elementToDup = page?.elements.find((el) => el.id === id);
+    if (!elementToDup) return;
+
+    const newDuplicated: CanvasElement = {
+      ...elementToDup,
+      id: `el_${Date.now()}`,
+      content: { ...elementToDup.content },
+    };
+
+    const updatedPages = project.pages.map((p, idx) => {
+      if (idx !== activePageIndex) return p;
+      return { ...p, elements: [...p.elements, newDuplicated] };
+    });
+
+    updateProjectState({ ...project, pages: updatedPages });
+    setSelectedElementId(newDuplicated.id);
+    triggerFeedback('📋 Duplicated element (Ctrl+D)');
+  }, [project, activePageIndex, updateProjectState, triggerFeedback]);
+
+  const handleCopy = useCallback(() => {
+    if (!selectedElement) return;
+    setClipboardElement(JSON.parse(JSON.stringify(selectedElement)));
+    triggerFeedback('📄 Copied element to clipboard (Ctrl+C)');
+  }, [selectedElement, triggerFeedback]);
+
+  const handleCut = useCallback(() => {
+    if (!selectedElement) return;
+    setClipboardElement(JSON.parse(JSON.stringify(selectedElement)));
+    handleDeleteElement(selectedElement.id);
+    triggerFeedback('✂ Cut element to clipboard (Ctrl+X)');
+  }, [selectedElement, handleDeleteElement, triggerFeedback]);
+
+  const handlePaste = useCallback(() => {
+    if (!clipboardElement) {
+      triggerFeedback('Clipboard is empty (Copy something with Ctrl+C first)');
+      return;
+    }
+    const newElement: CanvasElement = {
+      ...JSON.parse(JSON.stringify(clipboardElement)),
+      id: `el_${Date.now()}`,
+    };
+    const updatedPages = project.pages.map((p, idx) => {
+      if (idx !== activePageIndex) return p;
+      return { ...p, elements: [...p.elements, newElement] };
+    });
+    updateProjectState({ ...project, pages: updatedPages });
+    setSelectedElementId(newElement.id);
+    triggerFeedback('📋 Pasted element from clipboard (Ctrl+V)');
+  }, [clipboardElement, project, activePageIndex, updateProjectState, triggerFeedback]);
+
+  const handleMoveElementOrder = useCallback((id: string, direction: 'up' | 'down') => {
+    const page = project.pages[activePageIndex] || project.pages[0];
+    const elements = [...(page?.elements || [])];
+    const index = elements.findIndex((el) => el.id === id);
+    if (index < 0) return;
+
+    const targetIndex = direction === 'up' ? Math.max(0, index - 1) : Math.min(elements.length - 1, index + 1);
+    if (targetIndex === index) return;
+
+    const [moved] = elements.splice(index, 1);
+    elements.splice(targetIndex, 0, moved);
+
+    const updatedPages = project.pages.map((p, idx) => {
+      if (idx !== activePageIndex) return p;
+      return { ...p, elements };
+    });
+
+    updateProjectState({ ...project, pages: updatedPages });
+    triggerFeedback(direction === 'up' ? '▲ Moved element up (↑)' : '▼ Moved element down (↓)');
+  }, [project, activePageIndex, updateProjectState, triggerFeedback]);
+
+  // ─── GLOBAL KEYBOARD SHORTCUTS LISTENER ──────────────────────────────────
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const activeEl = document.activeElement;
+      const isInput =
+        activeEl instanceof HTMLInputElement ||
+        activeEl instanceof HTMLTextAreaElement ||
+        (activeEl as HTMLElement)?.isContentEditable;
+
+      const isMac = typeof navigator !== 'undefined' && navigator.platform?.toUpperCase().indexOf('MAC') >= 0;
+      const cmdOrCtrl = isMac ? e.metaKey : e.ctrlKey;
+
+      // Global shortcuts (Work anytime)
+      if (cmdOrCtrl && (e.key === 's' || e.key === 'S')) {
+        e.preventDefault();
+        saveSingleProject(project);
+        setSaveStatus('saved');
+        triggerFeedback('💾 Project saved! (Ctrl+S)');
+        return;
+      }
+
+      if (cmdOrCtrl && (e.key === 'p' || e.key === 'P')) {
+        e.preventDefault();
+        setIsPreviewOpen(true);
+        return;
+      }
+
+      if (cmdOrCtrl && (e.key === 'g' || e.key === 'G')) {
+        e.preventDefault();
+        setShowGrid((prev) => !prev);
+        triggerFeedback(showGrid ? 'Grid hidden' : 'Grid visible (Ctrl+G)');
+        return;
+      }
+
+      if (cmdOrCtrl && (e.key === '=' || e.key === '+')) {
+        e.preventDefault();
+        setZoomLevel((z) => Math.min(1.4, Number((z + 0.1).toFixed(1))));
+        return;
+      }
+      if (cmdOrCtrl && (e.key === '-' || e.key === '_')) {
+        e.preventDefault();
+        setZoomLevel((z) => Math.max(0.6, Number((z - 0.1).toFixed(1))));
+        return;
+      }
+      if (cmdOrCtrl && e.key === '0') {
+        e.preventDefault();
+        setZoomLevel(1);
+        return;
+      }
+
+      // If user is typing text inside an input/textarea, let them type normally
+      if (isInput) {
+        if (e.key === 'Escape') {
+          (activeEl as HTMLElement)?.blur();
+        }
+        return;
+      }
+
+      // Undo: Ctrl+Z
+      if (cmdOrCtrl && !e.shiftKey && (e.key === 'z' || e.key === 'Z')) {
+        e.preventDefault();
+        handleUndo();
+        return;
+      }
+
+      // Redo: Ctrl+Y or Ctrl+Shift+Z
+      if (
+        (cmdOrCtrl && (e.key === 'y' || e.key === 'Y')) ||
+        (cmdOrCtrl && e.shiftKey && (e.key === 'z' || e.key === 'Z'))
+      ) {
+        e.preventDefault();
+        handleRedo();
+        return;
+      }
+
+      // Copy: Ctrl+C
+      if (cmdOrCtrl && (e.key === 'c' || e.key === 'C')) {
+        if (selectedElement) {
+          e.preventDefault();
+          handleCopy();
+        }
+        return;
+      }
+
+      // Cut: Ctrl+X
+      if (cmdOrCtrl && (e.key === 'x' || e.key === 'X')) {
+        if (selectedElement) {
+          e.preventDefault();
+          handleCut();
+        }
+        return;
+      }
+
+      // Paste: Ctrl+V
+      if (cmdOrCtrl && (e.key === 'v' || e.key === 'V')) {
+        if (clipboardElement) {
+          e.preventDefault();
+          handlePaste();
+        }
+        return;
+      }
+
+      // Duplicate: Ctrl+D
+      if (cmdOrCtrl && (e.key === 'd' || e.key === 'D')) {
+        if (selectedElementId) {
+          e.preventDefault();
+          handleDuplicateElement(selectedElementId);
+        }
+        return;
+      }
+
+      // Delete: Delete or Backspace
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        if (selectedElementId) {
+          e.preventDefault();
+          handleDeleteElement(selectedElementId);
+        }
+        return;
+      }
+
+      // Deselect: Escape
+      if (e.key === 'Escape') {
+        if (selectedElementId) {
+          setSelectedElementId(null);
+          triggerFeedback('Deselected (Esc)');
+        }
+        if (showShortcutsModal) {
+          setShowShortcutsModal(false);
+        }
+        return;
+      }
+
+      // Move Element Order: ArrowUp / ArrowDown
+      if (e.key === 'ArrowUp' && selectedElementId) {
+        e.preventDefault();
+        handleMoveElementOrder(selectedElementId, 'up');
+        return;
+      }
+      if (e.key === 'ArrowDown' && selectedElementId) {
+        e.preventDefault();
+        handleMoveElementOrder(selectedElementId, 'down');
+        return;
+      }
+
+      // Shortcuts Modal: ? or F1
+      if (e.key === '?' || e.key === 'F1') {
+        e.preventDefault();
+        setShowShortcutsModal((prev) => !prev);
+        return;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [
+    project,
+    selectedElement,
+    selectedElementId,
+    clipboardElement,
+    showGrid,
+    showShortcutsModal,
+    handleUndo,
+    handleRedo,
+    handleCopy,
+    handleCut,
+    handlePaste,
+    handleDuplicateElement,
+    handleDeleteElement,
+    handleMoveElementOrder,
+    triggerFeedback,
+  ]);
 
   // ─── CLOUDINARY IMAGE UPLOAD ──────────────────────────────────────────────
   const uploadImageToCloudinary = async (file: File): Promise<string | null> => {
@@ -528,53 +809,6 @@ export default function SimpleCanvaEditor({
     });
   }, [activePageIndex]);
 
-  const handleDeleteElement = (id: string) => {
-    const updatedPages = project.pages.map((p, idx) => {
-      if (idx !== activePageIndex) return p;
-      return { ...p, elements: p.elements.filter((el) => el.id !== id) };
-    });
-
-    updateProjectState({ ...project, pages: updatedPages });
-    setSelectedElementId(null);
-  };
-
-  const handleDuplicateElement = (id: string) => {
-    const elementToDup = currentPage.elements.find((el) => el.id === id);
-    if (!elementToDup) return;
-
-    const newDuplicated: CanvasElement = {
-      ...elementToDup,
-      id: `el_${Date.now()}`,
-    };
-
-    const updatedPages = project.pages.map((p, idx) => {
-      if (idx !== activePageIndex) return p;
-      return { ...p, elements: [...p.elements, newDuplicated] };
-    });
-
-    updateProjectState({ ...project, pages: updatedPages });
-    setSelectedElementId(newDuplicated.id);
-  };
-
-  const handleMoveElementOrder = (id: string, direction: 'up' | 'down') => {
-    const elements = [...currentPage.elements];
-    const index = elements.findIndex((el) => el.id === id);
-    if (index < 0) return;
-
-    const targetIndex = direction === 'up' ? Math.max(0, index - 1) : Math.min(elements.length - 1, index + 1);
-    if (targetIndex === index) return;
-
-    const [moved] = elements.splice(index, 1);
-    elements.splice(targetIndex, 0, moved);
-
-    const updatedPages = project.pages.map((p, idx) => {
-      if (idx !== activePageIndex) return p;
-      return { ...p, elements };
-    });
-
-    updateProjectState({ ...project, pages: updatedPages });
-  };
-
   // ─── MULTI-PAGE CONTROLS ──────────────────────────────────────────────────
   const handleAddPage = () => {
     const newPageNumber = project.pages.length + 1;
@@ -645,14 +879,15 @@ export default function SimpleCanvaEditor({
           </div>
         </div>
 
-        {/* Center: Quick Canvas Controls */}
+        {/* Center: Quick Canvas Controls & Clipboard Toolbar */}
         <div className="hidden lg:flex items-center gap-1.5 bg-slate-850 p-1 rounded-xl border border-slate-800 text-xs">
+          {/* History */}
           <button
             type="button"
             onClick={handleUndo}
             disabled={historyIndex <= 0}
-            className="p-1.5 rounded hover:bg-slate-750 disabled:opacity-30 cursor-pointer"
-            title="Undo"
+            className="p-1.5 rounded hover:bg-slate-750 text-slate-300 disabled:opacity-30 cursor-pointer"
+            title="Undo (Ctrl + Z)"
           >
             <Undo2 size={14} />
           </button>
@@ -660,19 +895,60 @@ export default function SimpleCanvaEditor({
             type="button"
             onClick={handleRedo}
             disabled={historyIndex >= history.length - 1}
-            className="p-1.5 rounded hover:bg-slate-750 disabled:opacity-30 cursor-pointer"
-            title="Redo"
+            className="p-1.5 rounded hover:bg-slate-750 text-slate-300 disabled:opacity-30 cursor-pointer"
+            title="Redo (Ctrl + Y / Ctrl + Shift + Z)"
           >
             <Redo2 size={14} />
           </button>
 
-          <div className="h-4 w-px bg-slate-750 mx-1" />
+          <div className="h-4 w-px bg-slate-750 mx-0.5" />
 
+          {/* Clipboard & Element Actions */}
           <button
             type="button"
-            onClick={() => setZoomLevel((z) => Math.max(0.6, z - 0.1))}
-            className="p-1.5 rounded hover:bg-slate-750 cursor-pointer"
-            title="Zoom Out"
+            onClick={handleCopy}
+            disabled={!selectedElement}
+            className="p-1.5 rounded hover:bg-slate-750 text-slate-300 disabled:opacity-30 cursor-pointer"
+            title="Copy Element (Ctrl + C)"
+          >
+            <Copy size={14} />
+          </button>
+          <button
+            type="button"
+            onClick={handleCut}
+            disabled={!selectedElement}
+            className="p-1.5 rounded hover:bg-slate-750 text-slate-300 disabled:opacity-30 cursor-pointer"
+            title="Cut Element (Ctrl + X)"
+          >
+            <Scissors size={14} />
+          </button>
+          <button
+            type="button"
+            onClick={handlePaste}
+            disabled={!clipboardElement}
+            className="p-1.5 rounded hover:bg-slate-750 text-slate-300 disabled:opacity-30 cursor-pointer"
+            title={clipboardElement ? "Paste Element (Ctrl + V)" : "Clipboard is empty"}
+          >
+            <Clipboard size={14} />
+          </button>
+          <button
+            type="button"
+            onClick={() => selectedElementId && handleDeleteElement(selectedElementId)}
+            disabled={!selectedElementId}
+            className="p-1.5 rounded hover:bg-rose-950/60 hover:text-rose-400 text-slate-400 disabled:opacity-30 cursor-pointer"
+            title="Delete Selected Element (Del / Backspace)"
+          >
+            <Trash2 size={14} />
+          </button>
+
+          <div className="h-4 w-px bg-slate-750 mx-0.5" />
+
+          {/* Zoom */}
+          <button
+            type="button"
+            onClick={() => setZoomLevel((z) => Math.max(0.6, Number((z - 0.1).toFixed(1))))}
+            className="p-1.5 rounded hover:bg-slate-750 text-slate-300 cursor-pointer"
+            title="Zoom Out (Ctrl -)"
           >
             <ZoomOut size={14} />
           </button>
@@ -681,27 +957,41 @@ export default function SimpleCanvaEditor({
           </span>
           <button
             type="button"
-            onClick={() => setZoomLevel((z) => Math.min(1.4, z + 0.1))}
-            className="p-1.5 rounded hover:bg-slate-750 cursor-pointer"
-            title="Zoom In"
+            onClick={() => setZoomLevel((z) => Math.min(1.4, Number((z + 0.1).toFixed(1))))}
+            className="p-1.5 rounded hover:bg-slate-750 text-slate-300 cursor-pointer"
+            title="Zoom In (Ctrl +)"
           >
             <ZoomIn size={14} />
           </button>
 
-          <div className="h-4 w-px bg-slate-750 mx-1" />
+          <div className="h-4 w-px bg-slate-750 mx-0.5" />
 
+          {/* Alignment Grid */}
           <button
             type="button"
             onClick={() => setShowGrid(!showGrid)}
             className={`p-1.5 rounded cursor-pointer ${
               showGrid ? 'bg-amber-500/20 text-amber-400 font-bold' : 'hover:bg-slate-750 text-slate-400'
             }`}
-            title="Toggle Alignment Grid"
+            title="Toggle Alignment Grid (Ctrl + G)"
           >
             <Grid size={14} />
           </button>
 
-          <div className="h-4 w-px bg-slate-750 mx-1" />
+          <div className="h-4 w-px bg-slate-750 mx-0.5" />
+
+          {/* Keyboard Shortcuts Helper Modal Button */}
+          <button
+            type="button"
+            onClick={() => setShowShortcutsModal(true)}
+            className="p-1.5 rounded hover:bg-slate-750 text-amber-400 hover:text-amber-300 flex items-center gap-1 cursor-pointer transition-all"
+            title="Keyboard Shortcuts Cheat Sheet (?)"
+          >
+            <Keyboard size={14} />
+            <span className="hidden xl:inline text-[11px] font-semibold">Shortcuts</span>
+          </button>
+
+          <div className="h-4 w-px bg-slate-750 mx-0.5" />
 
           {/* Full-Width Newspaper Sheet Toggle (Hides sidebars to stretch canvas) */}
           <button
@@ -1833,7 +2123,187 @@ export default function SimpleCanvaEditor({
         </div>
       )}
 
-      {/* ─── 5. FULLSCREEN PREVIEW & EXPORT MODAL ─────────────────────────── */}
+      {/* ─── 5. FLOATING SHORTCUT NOTIFICATION TOAST ──────────────────────── */}
+      {shortcutFeedback && (
+        <div className="fixed bottom-6 right-6 z-[200] bg-slate-900/95 border border-amber-500/60 text-amber-300 px-4 py-2 rounded-2xl shadow-2xl backdrop-blur-md flex items-center gap-2 text-xs font-bold animate-slide-up">
+          <Sparkles size={14} className="text-amber-400" />
+          <span>{shortcutFeedback}</span>
+        </div>
+      )}
+
+      {/* ─── 6. KEYBOARD SHORTCUTS CHEAT SHEET MODAL ───────────────────────── */}
+      {showShortcutsModal && (
+        <div className="fixed inset-0 z-[300] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-slate-900 border border-slate-700/80 rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+            {/* Modal Header */}
+            <div className="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-850">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center">
+                  <Keyboard size={20} />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white font-broadsheet">
+                    Newspaper Studio Keyboard Shortcuts
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    Pro keys to edit stories, manage layout, and produce vintage broadsheets faster.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowShortcutsModal(false)}
+                className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-750 transition-colors cursor-pointer"
+                title="Close"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 overflow-y-auto space-y-6 text-xs">
+              {/* Category 1: Clipboard & History */}
+              <div className="space-y-2.5">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400 block">
+                  1. History & Clipboard Actions
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <span className="text-slate-300">Undo Last Action</span>
+                    <kbd className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-amber-300 font-mono text-[11px]">
+                      Ctrl + Z
+                    </kbd>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <span className="text-slate-300">Redo Action</span>
+                    <kbd className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-amber-300 font-mono text-[11px]">
+                      Ctrl + Y
+                    </kbd>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <span className="text-slate-300">Copy Selected Element</span>
+                    <kbd className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-amber-300 font-mono text-[11px]">
+                      Ctrl + C
+                    </kbd>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <span className="text-slate-300">Cut Selected Element</span>
+                    <kbd className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-amber-300 font-mono text-[11px]">
+                      Ctrl + X
+                    </kbd>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <span className="text-slate-300">Paste Element</span>
+                    <kbd className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-amber-300 font-mono text-[11px]">
+                      Ctrl + V
+                    </kbd>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <span className="text-slate-300">Duplicate Element</span>
+                    <kbd className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-amber-300 font-mono text-[11px]">
+                      Ctrl + D
+                    </kbd>
+                  </div>
+                </div>
+              </div>
+
+              {/* Category 2: Element Management & Navigation */}
+              <div className="space-y-2.5">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-sky-400 block">
+                  2. Selection & Layout Reordering
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <span className="text-slate-300">Delete Element</span>
+                    <kbd className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-sky-300 font-mono text-[11px]">
+                      Del / Backspace
+                    </kbd>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <span className="text-slate-300">Deselect / Close</span>
+                    <kbd className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-sky-300 font-mono text-[11px]">
+                      Esc
+                    </kbd>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <span className="text-slate-300">Move Element Up</span>
+                    <kbd className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-sky-300 font-mono text-[11px]">
+                      ↑ Up Arrow
+                    </kbd>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <span className="text-slate-300">Move Element Down</span>
+                    <kbd className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-sky-300 font-mono text-[11px]">
+                      ↓ Down Arrow
+                    </kbd>
+                  </div>
+                </div>
+              </div>
+
+              {/* Category 3: Canvas View & Project Actions */}
+              <div className="space-y-2.5">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400 block">
+                  3. Canvas View & Project Controls
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <span className="text-slate-300">Save Project</span>
+                    <kbd className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-emerald-300 font-mono text-[11px]">
+                      Ctrl + S
+                    </kbd>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <span className="text-slate-300">Print / PDF Preview</span>
+                    <kbd className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-emerald-300 font-mono text-[11px]">
+                      Ctrl + P
+                    </kbd>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <span className="text-slate-300">Toggle Alignment Grid</span>
+                    <kbd className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-emerald-300 font-mono text-[11px]">
+                      Ctrl + G
+                    </kbd>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <span className="text-slate-300">Zoom In / Zoom Out</span>
+                    <kbd className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-emerald-300 font-mono text-[11px]">
+                      Ctrl + / Ctrl -
+                    </kbd>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <span className="text-slate-300">Reset Zoom (100%)</span>
+                    <kbd className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-emerald-300 font-mono text-[11px]">
+                      Ctrl + 0
+                    </kbd>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <span className="text-slate-300">Open Shortcuts Guide</span>
+                    <kbd className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-emerald-300 font-mono text-[11px]">
+                      ? or F1
+                    </kbd>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t border-slate-800 bg-slate-850 flex items-center justify-between">
+              <span className="text-[11px] text-slate-400">
+                💡 Mac users can use <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300 font-mono text-[10px]">Cmd ⌘</kbd> instead of <kbd className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300 font-mono text-[10px]">Ctrl</kbd>.
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowShortcutsModal(false)}
+                className="btn-primary text-xs py-2 px-5 font-bold rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 cursor-pointer shadow-md"
+              >
+                Got It!
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── 7. FULLSCREEN PREVIEW & EXPORT MODAL ─────────────────────────── */}
       <SimplePreviewModal
         project={project}
         isOpen={isPreviewOpen}

@@ -5,6 +5,7 @@ import CustomSnippetLab from '@/components/custom/CustomSnippetLab';
 import WeakKeyGym from '@/components/custom/WeakKeyGym';
 import SuddenDeathMode from '@/components/custom/SuddenDeathMode';
 import TypingTest from '@/components/typing/TypingTest';
+import { InContentAd } from '@/components/ads/InContentAd';
 import { Code, Target, Flame, Gamepad2, Sparkles, ArrowLeft, RotateCcw } from 'lucide-react';
 import Link from 'next/link';
 
@@ -153,6 +154,9 @@ export default function CustomStudioClient() {
             )}
             {activeTab === 'sudden-death' && <SuddenDeathMode />}
           </div>
+
+          {/* Middle Page In-Content Banner Ad */}
+          <InContentAd slot="8392104826" />
         </>
       )}
     </div>

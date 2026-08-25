@@ -14,6 +14,7 @@ import SprintRelayGame from '@/components/games/SprintRelayGame';
 
 import MultiplayerLobby from '@/components/multiplayer/MultiplayerLobby';
 import LiveMultiplayerTrack from '@/components/multiplayer/LiveMultiplayerTrack';
+import { InContentAd } from '@/components/ads/InContentAd';
 import { MultiplayerRoom, GameModeId } from '@/lib/multiplayer';
 
 import {
@@ -538,6 +539,9 @@ export default function GamesHubClient() {
           </div>
         </div>
       </div>
+
+      {/* Middle Page In-Content Banner Ad */}
+      {!isFullscreen && <InContentAd slot="8392104828" className="my-3" />}
 
       {/* Live Multiplayer Track HUD (when playing in multiplayer) */}
       {playMode === 'multiplayer' && room && (room.status === 'playing' || room.status === 'finished') && (

@@ -111,45 +111,6 @@ export function useTypingTest(
     initChars(t);
   }, [config, buildText, initChars]);
 
-  // ── Start ─────────────────────────────────────────────────────────────────
-
-  const startTest = useCallback(() => {
-    const t = buildText();
-    setText(t);
-    initChars(t);
-    setCursorIndex(0);
-    setPhase('active');
-    startTimestamp.current = performance.now();
-
-    if (config.mode === 'time') {
-      const duration = config.timeDuration ?? 60;
-      setTimeLeft(duration);
-      let remaining = duration;
-
-      timerRef.current = setInterval(() => {
-        remaining -= 1;
-        setTimeLeft(remaining);
-        if (remaining <= 0) {
-          clearInterval(timerRef.current!);
-          finishTest();
-        }
-      }, 1000);
-    }
-
-    // WPM sampling every 500ms
-    wpmIntervalRef.current = setInterval(() => {
-      const elapsed = performance.now() - startTimestamp.current;
-      const sec = Math.floor(elapsed / 1000);
-      const correct = keystrokeEvents.current.filter((e) => e.correct).length;
-      const wpm = calcRawWpm(correct, elapsed);
-      if (sec > 0) {
-        wpmHistory.current.push({ second: sec, wpm });
-        setLiveWpm(wpm);
-        setTimeElapsed(sec);
-      }
-    }, 500);
-  }, [config, buildText, initChars]); // eslint-disable-line react-hooks/exhaustive-deps
-
   // ── Finish ────────────────────────────────────────────────────────────────
 
   const finishTest = useCallback(() => {
@@ -175,6 +136,54 @@ export function useTypingTest(
 
     setResultId(result.id);
   }, [config]);
+
+  // ── Start ─────────────────────────────────────────────────────────────────
+
+  const startTest = useCallback(() => {
+    if (phase === 'active') return;
+
+    // Use current text if available, otherwise build
+    let currentText = text;
+    if (!currentText || currentText.trim().length === 0) {
+      currentText = buildText();
+      setText(currentText);
+      initChars(currentText);
+    }
+
+    setCursorIndex(0);
+    setPhase('active');
+    startTimestamp.current = performance.now();
+
+    if (config.mode === 'time') {
+      const duration = config.timeDuration ?? 60;
+      setTimeLeft(duration);
+      let remaining = duration;
+
+      clearInterval(timerRef.current!);
+      timerRef.current = setInterval(() => {
+        remaining -= 1;
+        setTimeLeft(remaining);
+        if (remaining <= 0) {
+          clearInterval(timerRef.current!);
+          finishTest();
+        }
+      }, 1000);
+    }
+
+    // WPM sampling every 500ms
+    clearInterval(wpmIntervalRef.current!);
+    wpmIntervalRef.current = setInterval(() => {
+      const elapsed = performance.now() - startTimestamp.current;
+      const sec = Math.floor(elapsed / 1000);
+      const correct = keystrokeEvents.current.filter((e) => e.correct).length;
+      const wpm = calcRawWpm(correct, elapsed);
+      if (sec > 0) {
+        wpmHistory.current.push({ second: sec, wpm });
+        setLiveWpm(wpm);
+        setTimeElapsed(sec);
+      }
+    }, 500);
+  }, [phase, text, config, buildText, initChars, finishTest]);
 
   // ── Keyboard handler ──────────────────────────────────────────────────────
 
