@@ -396,18 +396,18 @@ export default function GamesHubClient() {
       {/* Hero Header */}
       <div className="text-center max-w-2xl mx-auto space-y-2">
         <h1
-          className="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight"
+          className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white tracking-tight"
           style={{ fontFamily: 'var(--font-display)' }}
         >
-          Typing Speed <span className="text-purple-600">Games & Multiplayer</span>
+          Typing Speed <span className="text-purple-600 dark:text-purple-400">Games & Multiplayer</span>
         </h1>
-        <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
           10 unique action typing games. Play solo campaigns or create a private room with a code to race live against friends simultaneously!
         </p>
       </div>
 
       {/* Mode Switcher: Solo vs Multiplayer */}
-      <div className="flex items-center justify-center gap-3 bg-white/80 backdrop-blur-md p-1.5 rounded-2xl border border-slate-200 shadow-2xs max-w-sm mx-auto">
+      <div className="flex items-center justify-center gap-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xs max-w-sm mx-auto">
         <button
           onClick={() => {
             setPlayMode('solo');
@@ -415,8 +415,8 @@ export default function GamesHubClient() {
           }}
           className={`flex-1 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
             playMode === 'solo'
-              ? 'bg-slate-900 text-white shadow-xs'
-              : 'text-slate-600 hover:text-slate-900'
+              ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-950 shadow-xs'
+              : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <User size={15} />
@@ -428,7 +428,7 @@ export default function GamesHubClient() {
           className={`flex-1 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
             playMode === 'multiplayer'
               ? 'bg-purple-600 text-white shadow-xs'
-              : 'text-slate-600 hover:text-slate-900'
+              : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <Users size={15} />
@@ -455,10 +455,10 @@ export default function GamesHubClient() {
       {playMode === 'solo' && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold font-mono uppercase tracking-wider text-slate-500">
+            <span className="text-xs font-bold font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Select From 10 Action Games:
             </span>
-            <span className="text-xs text-purple-600 font-semibold">{GAMES_CATALOG.length} Games Available</span>
+            <span className="text-xs text-purple-600 dark:text-purple-400 font-semibold">{GAMES_CATALOG.length} Games Available</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
@@ -470,8 +470,8 @@ export default function GamesHubClient() {
                   onClick={() => setActiveGame(g.id)}
                   className={`p-3 rounded-2xl border text-left transition-all relative flex flex-col justify-between shadow-2xs hover:shadow-md cursor-pointer ${
                     isSelected
-                      ? 'bg-white border-purple-500 ring-2 ring-purple-400/40 shadow-sm scale-102'
-                      : 'bg-white/80 border-slate-200/80 hover:bg-slate-50'
+                      ? 'bg-white dark:bg-slate-800 border-purple-500 ring-2 ring-purple-400/40 shadow-sm scale-102'
+                      : 'bg-white/80 dark:bg-slate-900/80 border-slate-200/80 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50'
                   }`}
                 >
                   <div>
@@ -481,12 +481,12 @@ export default function GamesHubClient() {
                         {g.tag}
                       </span>
                     </div>
-                    <h2 className="font-bold text-xs text-slate-800 line-clamp-1">{g.title}</h2>
-                    <p className="text-[10px] text-slate-500 line-clamp-1 mt-0.5">{g.category}</p>
+                    <h2 className="font-bold text-xs text-slate-800 dark:text-white line-clamp-1">{g.title}</h2>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">{g.category}</p>
                   </div>
 
-                  <div className="mt-2.5 pt-1.5 border-t border-slate-100 text-[10px] font-semibold flex items-center justify-between">
-                    <span className={isSelected ? 'text-purple-600 font-bold' : 'text-slate-400'}>
+                  <div className="mt-2.5 pt-1.5 border-t border-slate-100 dark:border-slate-800 text-[10px] font-semibold flex items-center justify-between">
+                    <span className={isSelected ? 'text-purple-600 dark:text-purple-400 font-bold' : 'text-slate-400 dark:text-slate-500'}>
                       {isSelected ? '▶ Active' : 'Select'}
                     </span>
                   </div>
@@ -498,41 +498,41 @@ export default function GamesHubClient() {
       )}
 
       {/* Quick Visual "How to Play" Guide Bar for Current Game */}
-      <div className="bg-white/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-2xs space-y-3 animate-fade-in">
+      <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xs space-y-3 animate-fade-in">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-            <HelpCircle size={16} className="text-purple-600" />
-            How to Play: <span className="text-purple-600">{currentGameMeta.title}</span>
+          <h3 className="text-sm font-bold text-slate-800 dark:text-white flex items-center gap-2">
+            <HelpCircle size={16} className="text-purple-600 dark:text-purple-400" />
+            How to Play: <span className="text-purple-600 dark:text-purple-400">{currentGameMeta.title}</span>
           </h3>
-          <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg">
+          <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg">
             Quick Guide
           </span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 space-y-1">
-            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60 space-y-1">
+            <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
               1. Objective 🎯
             </span>
-            <p className="text-xs text-slate-700 leading-relaxed font-medium">
+            <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
               {currentGameMeta.howToPlay.objective}
             </p>
           </div>
 
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 space-y-1">
-            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60 space-y-1">
+            <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
               2. Controls ⌨️
             </span>
-            <p className="text-xs text-slate-700 leading-relaxed font-medium">
+            <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
               {currentGameMeta.howToPlay.controls}
             </p>
           </div>
 
-          <div className="p-3 rounded-xl bg-purple-50/80 border border-purple-200/70 space-y-1">
-            <span className="text-[11px] font-bold text-purple-700 uppercase tracking-wider block">
+          <div className="p-3 rounded-xl bg-purple-50/80 dark:bg-purple-950/40 border border-purple-200/70 dark:border-purple-800/40 space-y-1">
+            <span className="text-[11px] font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wider block">
               3. Special Power ⚡
             </span>
-            <p className="text-xs text-purple-900 leading-relaxed font-medium">
+            <p className="text-xs text-purple-900 dark:text-purple-200 leading-relaxed font-medium">
               {currentGameMeta.howToPlay.special}
             </p>
           </div>
@@ -558,12 +558,12 @@ export default function GamesHubClient() {
         }`}
       >
         {/* Fullscreen Bar & Game Switcher Toolbar */}
-        <div className="flex items-center justify-between bg-white/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-slate-200 shadow-2xs">
+        <div className="flex items-center justify-between bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xs">
           <div className="flex items-center gap-2">
             <span className="text-xl">{currentGameMeta.icon}</span>
             <div>
-              <span className="text-xs font-bold text-slate-800">{currentGameMeta.title}</span>
-              <span className="text-[10px] text-slate-400 ml-2 hidden sm:inline">{currentGameMeta.category}</span>
+              <span className="text-xs font-bold text-slate-800 dark:text-white">{currentGameMeta.title}</span>
+              <span className="text-[10px] text-slate-400 dark:text-slate-500 ml-2 hidden sm:inline">{currentGameMeta.category}</span>
             </div>
           </div>
 

@@ -136,24 +136,24 @@ export default function FaqPage() {
             {FAQS.map((faq, i) => (
               <details
                 key={i}
-                className="card p-0 overflow-hidden group border border-slate-200/80"
+                className="card p-0 overflow-hidden group border border-slate-200/80 dark:border-slate-800 bg-white/80 dark:bg-slate-900/90"
               >
                 <summary
-                  className="flex items-center justify-between p-6 cursor-pointer font-semibold text-slate-700 hover:text-sage-700 transition-colors list-none"
+                  className="flex items-center justify-between p-6 cursor-pointer font-semibold text-slate-800 dark:text-white hover:text-sage-700 dark:hover:text-sage-300 transition-colors list-none"
                   style={{ fontFamily: 'var(--font-display)' }}
                 >
                   <span className="text-base">{faq.q}</span>
-                  <span className="text-slate-300 group-open:rotate-45 transition-transform duration-200 ml-4 flex-shrink-0 text-xl">
+                  <span className="text-slate-400 dark:text-slate-400 group-open:rotate-45 transition-transform duration-200 ml-4 flex-shrink-0 text-xl font-bold">
                     +
                   </span>
                 </summary>
                 <div className="px-6 pb-6 -mt-2">
-                  <p className="text-slate-600 leading-relaxed text-sm">{faq.a}</p>
+                  <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm">{faq.a}</p>
                   {faq.guideLink && (
-                    <div className="mt-3 pt-2 border-t border-slate-100">
+                    <div className="mt-3 pt-2 border-t border-slate-100 dark:border-slate-800">
                       <Link
                         href={faq.guideLink}
-                        className="text-xs font-semibold text-sage-600 hover:underline inline-flex items-center gap-1"
+                        className="text-xs font-semibold text-sage-600 dark:text-sage-400 hover:underline inline-flex items-center gap-1"
                       >
                         <BookOpen size={12} />
                         {faq.guideLabel}
@@ -166,16 +166,16 @@ export default function FaqPage() {
           </div>
 
           {/* Quick Interlink Footer Card */}
-          <div className="mt-12 card p-6 bg-gradient-to-r from-cream-light/60 to-white flex flex-col sm:flex-row items-center justify-between gap-4 border border-slate-200 text-center sm:text-left">
+          <div className="mt-12 card p-6 bg-gradient-to-r from-cream-light/60 to-white dark:from-slate-900 dark:to-slate-950 flex flex-col sm:flex-row items-center justify-between gap-4 border border-slate-200 dark:border-slate-800 text-center sm:text-left">
             <div>
-              <h3 className="text-sm font-bold text-slate-800">Ready to test your typing speed?</h3>
-              <p className="text-xs text-slate-500 mt-0.5">Take a quick 1-minute test or practice on blog articles.</p>
+              <h3 className="text-sm font-bold text-slate-800 dark:text-white">Ready to test your typing speed?</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Take a quick 1-minute test or practice on blog articles.</p>
             </div>
             <div className="flex gap-2">
               <Link href="/" className="btn-primary text-xs py-2 px-3.5">
                 Take Speed Test →
               </Link>
-              <Link href="/blog" className="btn-ghost text-xs py-2 px-3.5">
+              <Link href="/blog" className="btn-ghost text-xs py-2 px-3.5 dark:text-slate-300 dark:border-slate-700">
                 Browse Guides
               </Link>
             </div>

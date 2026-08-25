@@ -29,7 +29,7 @@ const footerLinks = {
 
 export default function Footer() {
   return (
-    <footer className="mt-auto border-t border-stone-200/60 bg-cream-dark/40">
+    <footer className="mt-auto border-t border-stone-200/60 dark:border-slate-800/80 bg-cream-dark/40 dark:bg-slate-950 transition-colors duration-200">
       <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-12 py-14">
         {/* Top row */}
         <div className="grid grid-cols-2 gap-10 md:grid-cols-4">
@@ -43,27 +43,27 @@ export default function Footer() {
                 </svg>
               </div>
               <span
-                className="text-lg font-bold text-slate-800"
+                className="text-lg font-bold text-slate-800 dark:text-white"
                 style={{ fontFamily: 'var(--font-display)' }}
               >
                 Typetune
               </span>
             </Link>
-            <p className="text-sm text-slate-500 leading-relaxed max-w-[200px]">
+            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-[200px]">
               The calm typing test that turns your keystrokes into music.
             </p>
             <div className="flex items-center gap-3 mt-5">
               <a
                 href="https://twitter.com"
                 aria-label="Typetune on Twitter"
-                className="p-2 rounded-lg text-slate-400 hover:text-sage-600 hover:bg-sage-100 transition-colors"
+                className="p-2 rounded-lg text-slate-400 hover:text-sage-600 dark:hover:text-sage-400 hover:bg-sage-100 dark:hover:bg-slate-800 transition-colors"
               >
                 <Share2 size={16} />
               </a>
               <a
                 href="https://github.com"
                 aria-label="TypeTunes on GitHub"
-                className="p-2 rounded-lg text-slate-400 hover:text-sage-600 hover:bg-sage-100 transition-colors"
+                className="p-2 rounded-lg text-slate-400 hover:text-sage-600 dark:hover:text-sage-400 hover:bg-sage-100 dark:hover:bg-slate-800 transition-colors"
               >
                 <GitFork size={16} />
               </a>
@@ -73,7 +73,7 @@ export default function Footer() {
           {/* Link columns */}
           {Object.entries(footerLinks).map(([section, links]) => (
             <div key={section}>
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-4">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-300 mb-4">
                 {section}
               </h3>
               <ul className="space-y-2.5">
@@ -81,7 +81,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-slate-500 hover:text-sage-600 transition-colors"
+                      className="text-sm text-slate-600 dark:text-slate-400 hover:text-sage-600 dark:hover:text-sage-300 transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -93,11 +93,11 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 flex flex-col items-center gap-2 border-t border-cream-dark pt-8 text-center md:flex-row md:justify-between">
-          <p className="text-xs text-slate-400">
+        <div className="mt-12 flex flex-col items-center gap-2 border-t border-cream-dark dark:border-slate-800 pt-8 text-center md:flex-row md:justify-between">
+          <p className="text-xs text-slate-400 dark:text-slate-500">
             © {new Date().getFullYear()} Typetune. Free to use, always.
           </p>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-400 dark:text-slate-500">
             Built with ♪ and Next.js.
           </p>
         </div>

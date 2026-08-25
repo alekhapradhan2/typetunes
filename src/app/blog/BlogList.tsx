@@ -1,6 +1,4 @@
-'use client';
-
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import type { BlogPost } from '@/lib/types';
 import Link from 'next/link';
 import { Clock, Search, Keyboard, BookOpen } from 'lucide-react';
@@ -106,10 +104,9 @@ export default function BlogList({ posts }: BlogListProps) {
           {filteredPosts.map((post, index) => {
             const catColor = CATEGORY_COLORS[post.category] ?? '#6aa850';
             return (
-              <>
+              <React.Fragment key={post.slug}>
                 <div
-                  key={post.slug}
-                  className="card p-6 flex flex-col justify-between hover:shadow-xl transition-all duration-200 border border-slate-200/80 group bg-white"
+                  className="card p-6 flex flex-col justify-between hover:shadow-xl transition-all duration-200 border border-slate-200/80 dark:border-slate-800 group bg-white dark:bg-slate-900/90"
                 >
                   <div>
                     {/* Top Metadata Row */}
@@ -120,7 +117,7 @@ export default function BlogList({ posts }: BlogListProps) {
                       >
                         {post.category}
                       </span>
-                      <span className="text-xs text-slate-400 flex items-center gap-1">
+                      <span className="text-xs text-slate-400 dark:text-slate-500 flex items-center gap-1">
                         <Clock size={11} /> {post.readingTime} min
                       </span>
                     </div>
@@ -128,7 +125,7 @@ export default function BlogList({ posts }: BlogListProps) {
                     {/* Title */}
                     <Link href={`/blog/${post.slug}`} className="block">
                       <h2
-                        className="text-lg font-bold text-slate-800 group-hover:text-sage-700 transition-colors mb-2 leading-snug"
+                        className="text-lg font-bold text-slate-800 dark:text-white group-hover:text-sage-700 dark:group-hover:text-sage-300 transition-colors mb-2 leading-snug"
                         style={{ fontFamily: 'var(--font-display)' }}
                       >
                         {post.title}
@@ -136,16 +133,16 @@ export default function BlogList({ posts }: BlogListProps) {
                     </Link>
 
                     {/* Description */}
-                    <p className="text-xs sm:text-sm text-slate-500 leading-relaxed line-clamp-2 mb-5">
+                    <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2 mb-5">
                       {post.description}
                     </p>
                   </div>
 
                   {/* Bottom Action Bar with 2 options */}
-                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+                  <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
                     <Link
                       href={`/blog/${post.slug}`}
-                      className="btn-ghost text-xs py-2 px-3.5 flex items-center justify-center gap-1.5 flex-1"
+                      className="btn-ghost text-xs py-2 px-3.5 flex items-center justify-center gap-1.5 flex-1 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-800"
                     >
                       <BookOpen size={14} />
                       Read Article
@@ -167,7 +164,7 @@ export default function BlogList({ posts }: BlogListProps) {
                     <InFeedAd className="my-2" />
                   </div>
                 )}
-              </>
+              </React.Fragment>
             );
           })}
         </div>

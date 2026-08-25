@@ -55,16 +55,16 @@ export default function CustomStudioClient() {
       {/* If user launched a custom test into standard engine */}
       {activeTestText ? (
         <div className="space-y-6 animate-fade-in">
-          <div className="flex items-center justify-between bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-slate-200 shadow-xs">
+          <div className="flex items-center justify-between bg-white/90 dark:bg-slate-900/90 backdrop-blur-md p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
             <div>
-              <span className="text-xs font-medium text-slate-400 uppercase tracking-wider block">
+              <span className="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider block">
                 Active Custom Session
               </span>
-              <h2 className="text-lg font-bold text-slate-800">{activeTestTitle}</h2>
+              <h2 className="text-lg font-bold text-slate-800 dark:text-white">{activeTestTitle}</h2>
             </div>
             <button
               onClick={handleExitCustomSession}
-              className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <RotateCcw size={14} />
               Exit to Studio Hub
@@ -82,24 +82,24 @@ export default function CustomStudioClient() {
           {/* Studio Hero Header */}
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <h1
-              className="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight"
+              className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white tracking-tight"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              Programming & Custom <span className="text-sage-600">Typing Studio</span>
+              Programming & Custom <span className="text-sage-600 dark:text-sage-400">Typing Studio</span>
             </h1>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
               Practice coding speed with JavaScript, Python, TypeScript, SQL, and React snippets, drill your weakest pinky keys, or paste your own custom text.
             </p>
           </div>
 
           {/* Navigation Tabs Bar */}
-          <div className="flex items-center justify-start sm:justify-center overflow-x-auto pb-2 gap-1.5 border-b border-slate-200/80">
+          <div className="flex items-center justify-start sm:justify-center overflow-x-auto pb-2 gap-1.5 border-b border-slate-200/80 dark:border-slate-800">
             <button
               onClick={() => setActiveTab('snippets')}
-              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 whitespace-nowrap ${
+              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
                 activeTab === 'snippets'
                   ? 'bg-sage-600 text-white shadow-sm'
-                  : 'text-slate-600 hover:bg-sage-50 hover:text-slate-900 bg-white/60 border border-slate-200/60'
+                  : 'text-slate-600 dark:text-slate-300 hover:bg-sage-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800'
               }`}
             >
               <Code size={16} />
@@ -108,10 +108,10 @@ export default function CustomStudioClient() {
 
             <button
               onClick={() => setActiveTab('weak-keys')}
-              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 whitespace-nowrap ${
+              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
                 activeTab === 'weak-keys'
                   ? 'bg-sage-600 text-white shadow-sm'
-                  : 'text-slate-600 hover:bg-sage-50 hover:text-slate-900 bg-white/60 border border-slate-200/60'
+                  : 'text-slate-600 dark:text-slate-300 hover:bg-sage-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800'
               }`}
             >
               <Target size={16} />
@@ -120,10 +120,10 @@ export default function CustomStudioClient() {
 
             <button
               onClick={() => setActiveTab('sudden-death')}
-              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 whitespace-nowrap ${
+              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
                 activeTab === 'sudden-death'
                   ? 'bg-amber-600 text-white shadow-sm'
-                  : 'text-slate-600 hover:bg-amber-50 hover:text-slate-900 bg-white/60 border border-slate-200/60'
+                  : 'text-slate-600 dark:text-slate-300 hover:bg-amber-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800'
               }`}
             >
               <Flame size={16} />
@@ -132,7 +132,7 @@ export default function CustomStudioClient() {
 
             <Link
               href="/games"
-              className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 whitespace-nowrap bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 shadow-2xs"
+              className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 whitespace-nowrap bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/60 border border-purple-200 dark:border-purple-800 shadow-2xs"
             >
               <Gamepad2 size={16} />
               Play All Games 🎮 ↗
