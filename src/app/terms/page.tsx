@@ -1,20 +1,41 @@
 import type { Metadata } from 'next';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service — Usage Guidelines & Rules | TypeTunes',
+  title: 'Terms of Service — Platform Usage Rules',
   description:
-    'Read the TypeTunes Terms of Service. Understand our acceptable use policy, intellectual property rights, disclaimer of warranties, and service terms.',
-  alternates: { canonical: 'https://typetunes.in/terms' },
+    'Read the Typetune Terms of Service. Understand our acceptable use policy, intellectual property rights, disclaimer of warranties, and service terms.',
+  alternates: { canonical: 'https://typetune.ollypedia.in/terms' },
+  openGraph: {
+    title: 'Terms of Service — Platform Usage Rules',
+    description:
+      'Read the Typetune Terms of Service. Understand our acceptable use policy, intellectual property rights, disclaimer of warranties, and service terms.',
+    url: 'https://typetune.ollypedia.in/terms',
+    siteName: 'Typetune',
+    type: 'website',
+    images: [
+      {
+        url: 'https://typetune.ollypedia.in/og-default.png',
+        width: 1200,
+        height: 630,
+        alt: 'Terms of Service – Typetune',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Terms of Service — Platform Usage Rules',
+    description:
+      'Read the Typetune Terms of Service and acceptable use policy.',
+    images: ['https://typetune.ollypedia.in/og-default.png'],
+  },
 };
 
-
 export default function TermsPage() {
-  const appUrl = 'https://typetunes.in';
-
   return (
     <div className="bg-hero min-h-screen">
-      <div className="mx-auto max-w-3xl px-6 py-12">
+      <div className="mx-auto max-w-4xl px-4 sm:px-8 lg:px-12 py-12">
         <Breadcrumbs items={[{ label: 'Terms of Service' }]} />
         <h1
           className="text-4xl font-bold text-slate-800 mb-2"
@@ -26,59 +47,126 @@ export default function TermsPage() {
           Last updated: {new Date().toLocaleDateString('en-US', { dateStyle: 'long' })}
         </p>
 
-        <div className="space-y-8 text-slate-600 leading-relaxed text-sm">
-          <p>
-            By using TypeTunes (&ldquo;the Service&rdquo;), you agree to these Terms of Service.
-            If you do not agree, please do not use the Service.
-          </p>
+        <div className="space-y-10 text-slate-600 leading-relaxed text-sm sm:text-base">
+          <section>
+            <p>
+              Welcome to <strong>Typetune</strong> (&ldquo;the Service&rdquo;, &ldquo;we&rdquo;, &ldquo;our&rdquo;, or &ldquo;us&rdquo;), accessible at{' '}
+              <Link href="/" className="text-sage-600 hover:underline">
+                https://typetune.ollypedia.in
+              </Link>
+              . By accessing or using Typetune, our typing speed tests, educational games, Newspaper Studio, and related features, you agree to be legally bound by these Terms of Service. If you do not agree with any part of these terms, please refrain from using the Service.
+            </p>
+          </section>
 
-          {[
-            {
-              title: '1. Use of the Service',
-              body: `TypeTunes is a free, web-based typing speed test and educational tool. You may use it for personal, educational, or professional self-improvement purposes. You may not use it to attempt to defraud, harm, or harass others, or to conduct automated testing (bots) that inflates results databases or degrades service performance for other users.`,
-            },
-            {
-              title: '2. No Account Required',
-              body: `No registration is required to use TypeTunes. Test results are stored anonymously by ID. You are responsible for keeping your result URLs private if you do not wish others to see your results.`,
-            },
-            {
-              title: '3. Intellectual Property',
-              body: `The TypeTunes software, design, and original blog content are © TypeTunes. The word banks and quote bank are original compositions. The Salamander Grand Piano audio samples are licensed CC BY 3.0 by Alexander Holm. You may share your test results with attribution to TypeTunes.`,
-            },
-            {
-              title: '4. Disclaimer of Warranties',
-              body: `TypeTunes is provided "as is" without warranty of any kind. We do not guarantee that the Service will be uninterrupted, error-free, or that results will be accurate to the millisecond. WPM measurements are indicative, not certified benchmarks.`,
-            },
-            {
-              title: '5. Limitation of Liability',
-              body: `To the maximum extent permitted by applicable law, TypeTunes and its creators are not liable for any indirect, incidental, or consequential damages arising from your use of the Service, including but not limited to: loss of data, inaccurate WPM results, or reliance on blog content for medical/professional decisions.`,
-            },
-            {
-              title: '6. Third-Party Services',
-              body: `TypeTunes uses Vercel for hosting, MongoDB Atlas for data storage, and may include privacy-compliant web analytics. Each of these services has its own terms and privacy policies, which also apply to your use.`,
-            },
-            {
-              title: '7. Changes',
-              body: `We may update these terms at any time. The "last updated" date above reflects the most recent revision. Continued use of TypeTunes after changes constitutes acceptance of the revised terms.`,
-            },
-            {
-              title: '8. Contact',
-              body: `For questions about these terms, contact legal@typetunes.in.`,
-            },
-          ].map((section) => (
-            <section key={section.title}>
-              <h2
-                className="text-lg font-semibold text-slate-700 mb-2"
-                style={{ fontFamily: 'var(--font-display)' }}
-              >
-                {section.title}
-              </h2>
-              <p>{section.body}</p>
-            </section>
-          ))}
+          <section>
+            <h2 className="text-xl font-bold text-slate-800 mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+              1. Description of Service & Eligibility
+            </h2>
+            <p>
+              Typetune is a free web-based typing speed test, educational game platform, and interactive student newspaper maker. No account registration is required to access our features. You may use Typetune for personal development, classroom instruction, and educational practice.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-slate-800 mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+              2. Acceptable Use Policy
+            </h2>
+            <p>
+              You agree to use Typetune solely for lawful purposes. You shall not:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 text-sm">
+              <li>Deploy automated bots, scripts, scrapers, or macro tools designed to simulate fake keystrokes or manipulate leaderboard metrics.</li>
+              <li>Attempt to overwhelm, disrupt, or attack our server infrastructure, APIs, or database systems (DDoS, rate-limit bypassing, or unauthorized vulnerability probing).</li>
+              <li>Upload or distribute unlawful, defamatory, infringing, or malicious content through Newspaper Studio or custom typing modules.</li>
+              <li>Attempt to reverse-engineer, decompile, or exploit our proprietary algorithms or server backend.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-slate-800 mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+              3. Intellectual Property Rights
+            </h2>
+            <p>
+              All original content, interactive code, user interface designs, logo artwork, custom word banks, and educational blog articles are the intellectual property of Typetune and its creator, Alekh Pradhan.
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 text-sm">
+              <li>
+                <strong>Audio Samples:</strong> The acoustic piano sound samples utilized in our audio synthesizer are derived from the Salamander Grand Piano soundfont by Alexander Holm, licensed under Creative Commons Attribution 3.0 (CC BY 3.0).
+              </li>
+              <li>
+                <strong>User Generated Newspapers & Results:</strong> You retain ownership of custom newspaper text and articles you compose in Newspaper Studio. You are granted permission to download, export, and distribute your generated PDFs and scorecard cards for personal or educational purposes.
+              </li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-slate-800 mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+              4. Third-Party Advertisements & Google AdSense
+            </h2>
+            <p>
+              Typetune may display advertisements provided by Google AdSense (Publisher ID: <code>ca-pub-5823659147566885</code>) and authorized advertising networks. We do not endorse or assume liability for third-party products, services, or websites advertised through these units. Interactions with third-party advertisements are governed by the respective advertiser&apos;s privacy and terms policies.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-slate-800 mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+              5. Educational & Classroom Use
+            </h2>
+            <p>
+              Teachers, schools, and academic institutions are welcome to incorporate Typetune into typing curricula and computer literacy classes. Typetune does not require student registration or collect personally identifiable student data, providing a COPPA-compliant environment for classroom learning.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-slate-800 mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+              6. Disclaimer of Warranties
+            </h2>
+            <p className="text-sm">
+              Typetune is provided on an &ldquo;as is&rdquo; and &ldquo;as available&rdquo; basis without warranties of any kind, whether express or implied. While we strive for high precision and maximum server availability, we do not warrant that calculations of Words Per Minute (WPM) or latency metrics will be error-free, uninterrupted, or legally certified for formal examinations.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-slate-800 mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+              7. Limitation of Liability
+            </h2>
+            <p className="text-sm">
+              To the maximum extent permitted by applicable law, Typetune, its founder Alekh Pradhan, and contributors shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your access to or inability to use the Service, loss of data, browser incompatibilities, or reliance on information presented in educational guides.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-slate-800 mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+              8. Modifications to Terms
+            </h2>
+            <p className="text-sm">
+              We reserve the right to revise or update these Terms of Service at any time. Any changes will become effective immediately upon posting to this page with an updated revision date. Your continued use of Typetune after changes signifies your agreement to the modified terms.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-slate-800 mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+              9. Contact & Inquiries
+            </h2>
+            <p className="text-sm">
+              If you have any questions or legal inquiries regarding these Terms of Service, please contact us at:
+            </p>
+            <div className="card p-5 mt-4 border border-slate-200/80 max-w-md">
+              <p className="font-bold text-slate-800">Typetune Legal & Support</p>
+              <p className="text-sm text-slate-600 mt-1">Lead Developer & Operator: Alekh Pradhan</p>
+              <p className="text-sm text-slate-600">
+                Official Email:{' '}
+                <a href="mailto:alekhpradhan33305@gmail.com" className="text-sage-600 hover:underline font-medium">
+                  alekhpradhan33305@gmail.com
+                </a>
+              </p>
+              <p className="text-sm text-slate-600">Website: https://typetune.ollypedia.in</p>
+            </div>
+          </section>
         </div>
       </div>
     </div>
   );
 }
+
 

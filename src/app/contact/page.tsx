@@ -4,10 +4,33 @@ import { Mail } from 'lucide-react';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata: Metadata = {
-  title: 'Contact TypeTunes — Support, Feedback & Inquiries',
+  title: 'Contact Typetune — Support & Feedback',
   description:
-    'Get in touch with the TypeTunes team. Send us feedback, bug reports, feature requests, or partnership inquiries with fast 24-hour turnaround.',
-  alternates: { canonical: 'https://typetunes.in/contact' },
+    'Get in touch with the Typetune team. Send us feedback, bug reports, feature requests, or partnership inquiries with fast 24-hour turnaround.',
+  alternates: { canonical: 'https://typetune.ollypedia.in/contact' },
+  openGraph: {
+    title: 'Contact Typetune — Support & Feedback',
+    description:
+      'Get in touch with the Typetune team. Send us feedback, bug reports, feature requests, or partnership inquiries with fast 24-hour turnaround.',
+    url: 'https://typetune.ollypedia.in/contact',
+    siteName: 'Typetune',
+    type: 'website',
+    images: [
+      {
+        url: 'https://typetune.ollypedia.in/og-default.png',
+        width: 1200,
+        height: 630,
+        alt: 'Contact Typetune',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Contact Typetune — Support & Feedback',
+    description:
+      'Get in touch with the Typetune team. Send us feedback, bug reports, feature requests, or partnership inquiries.',
+    images: ['https://typetune.ollypedia.in/og-default.png'],
+  },
 };
 
 export default function ContactPage() {
@@ -39,10 +62,10 @@ export default function ContactPage() {
                 <span className="text-sm font-semibold text-slate-600">Email us directly</span>
               </div>
               <a
-                href="mailto:hello@typetunes.in"
+                href="mailto:alekhpradhan33305@gmail.com"
                 className="text-sm text-sage-600 hover:underline break-all"
               >
-                hello@typetunes.in
+                alekhpradhan33305@gmail.com
               </a>
             </div>
 

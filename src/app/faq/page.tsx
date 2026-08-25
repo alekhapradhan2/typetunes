@@ -4,10 +4,33 @@ import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { ArrowRight, BookOpen, Zap } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Typing Speed FAQ — Common WPM & Touch Typing Questions',
+  title: 'Typing Speed FAQ & Touch Typing Guide',
   description:
     'Clear answers to common typing questions: what is a good WPM, how to calculate typing speed, touch typing vs hunt-and-peck, and piano typing benefits.',
-  alternates: { canonical: 'https://typetunes.in/faq' },
+  alternates: { canonical: 'https://typetune.ollypedia.in/faq' },
+  openGraph: {
+    title: 'Typing Speed FAQ & Touch Typing Guide',
+    description:
+      'Clear answers to common typing questions: what is a good WPM, how to calculate typing speed, touch typing vs hunt-and-peck, and piano typing benefits.',
+    url: 'https://typetune.ollypedia.in/faq',
+    siteName: 'Typetune',
+    type: 'website',
+    images: [
+      {
+        url: 'https://typetune.ollypedia.in/og-default.png',
+        width: 1200,
+        height: 630,
+        alt: 'Typing Speed FAQ – Typetune',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Typing Speed FAQ & Touch Typing Guide',
+    description:
+      'Clear answers to common typing questions: what is a good WPM, how to calculate typing speed, touch typing vs hunt-and-peck, and piano typing benefits.',
+    images: ['https://typetune.ollypedia.in/og-default.png'],
+  },
 };
 
 const FAQS = [

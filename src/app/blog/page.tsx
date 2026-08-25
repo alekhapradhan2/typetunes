@@ -4,10 +4,33 @@ import BlogList from './BlogList';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata: Metadata = {
-  title: 'Typing Guides & Practice Blog — How to Type Faster',
+  title: 'Typing Guides & Speed Practice',
   description:
     'Free, in-depth guides on improving typing speed, ergonomics, touch typing, WPM benchmarks, and the science of muscle memory with Read & Practice modes.',
-  alternates: { canonical: 'https://typetunes.in/blog' },
+  alternates: { canonical: 'https://typetune.ollypedia.in/blog' },
+  openGraph: {
+    title: 'Typing Guides & Speed Practice',
+    description:
+      'Free, in-depth guides on improving typing speed, ergonomics, touch typing, WPM benchmarks, and the science of muscle memory with Read & Practice modes.',
+    url: 'https://typetune.ollypedia.in/blog',
+    siteName: 'Typetune',
+    type: 'website',
+    images: [
+      {
+        url: 'https://typetune.ollypedia.in/og-default.png',
+        width: 1200,
+        height: 630,
+        alt: 'Typing Guides & Practice Library – Typetune',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Typing Guides & Practice – Speed & Technique',
+    description:
+      'Free, in-depth guides on improving typing speed, ergonomics, touch typing, WPM benchmarks, and the science of muscle memory with Read & Practice modes.',
+    images: ['https://typetune.ollypedia.in/og-default.png'],
+  },
 };
 
 

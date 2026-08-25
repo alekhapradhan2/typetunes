@@ -32,16 +32,40 @@ const nextConfig: NextConfig = {
   // Redirects for SEO — permanent 301s
   async redirects() {
     return [
-      // www to non-www canonical redirect (when www host is matched)
+      // www to non-www canonical redirect (when www.typetune.ollypedia.in host is matched)
       {
         source: '/:path*',
         has: [
           {
             type: 'host',
-            value: 'www.typetunes.in',
+            value: 'www.typetune.ollypedia.in',
           },
         ],
-        destination: 'https://typetunes.in/:path*',
+        destination: 'https://typetune.ollypedia.in/:path*',
+        permanent: true,
+      },
+      // 301 Redirect legacy typetune.ollypedia.com to canonical typetune.ollypedia.in
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'typetune.ollypedia.com',
+          },
+        ],
+        destination: 'https://typetune.ollypedia.in/:path*',
+        permanent: true,
+      },
+      // 301 Redirect legacy www.typetune.ollypedia.com to canonical typetune.ollypedia.in
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.typetune.ollypedia.com',
+          },
+        ],
+        destination: 'https://typetune.ollypedia.in/:path*',
         permanent: true,
       },
       // Short / variant test paths canonicalized to standardized test slugs

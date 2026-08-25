@@ -17,11 +17,11 @@ export default function ContactForm() {
 
     // In production: replace with a real form backend (Formspree, Resend, etc.)
     // For now, construct a mailto: link as a fallback
-    const subject = encodeURIComponent(`[TypeTunes Feedback] ${form.name}`);
+    const subject = encodeURIComponent(`[Typetune Feedback] ${form.name}`);
     const body = encodeURIComponent(
       `Name: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`
     );
-    window.location.href = `mailto:hello@typetunes.in?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:alekhpradhan33305@gmail.com?subject=${subject}&body=${body}`;
 
     setTimeout(() => setStatus('sent'), 800);
   };

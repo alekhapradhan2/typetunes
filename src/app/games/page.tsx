@@ -2,10 +2,11 @@ import type { Metadata } from 'next';
 import GamesHubClient from '@/components/games/GamesHubClient';
 
 export const metadata: Metadata = {
-  title: 'Typing Speed Games — Free Online Car Racing, Space & RPG Arcade | TypeTunes',
+  title: 'Typing Games for Students – Free Arcade',
   description:
-    'Play free online typing speed games with musical piano audio. Race sports cars in Nitro Highway Racer, shoot meteors in Cosmic Galaxy Defender, and conquer monster RPG bosses to boost your WPM velocity and accuracy.',
+    'Play free educational typing games for students. Race sports cars, defend space sectors, and battle RPG monsters while boosting your typing speed and accuracy.',
   keywords: [
+    'typing games for students',
     'typing speed games',
     'online typing games',
     'free typing games',
@@ -16,34 +17,43 @@ export const metadata: Metadata = {
     'keyboard speed games',
     'wpm arcade games',
     'fun typing practice',
-    'typing games for kids and adults',
+    'Typetune games',
   ],
   alternates: {
-    canonical: 'https://typetunes.in/games',
+    canonical: 'https://typetune.ollypedia.in/games',
   },
   openGraph: {
-    title: 'Typing Speed Games — Free Online Car Racing, Space & RPG Arcade | TypeTunes',
+    title: 'Typing Games for Students – Free Arcade',
     description:
-      'Level up your keyboard velocity! Play Nitro Highway Racer, Cosmic Space Defender, and Boss RPG with live musical audio and real-time WPM stats.',
-    url: 'https://typetunes.in/games',
-    siteName: 'TypeTunes',
+      'Play free educational typing games for students. Race sports cars, defend space sectors, and battle RPG monsters while boosting your typing speed and accuracy.',
+    url: 'https://typetune.ollypedia.in/games',
+    siteName: 'Typetune',
     type: 'website',
+    images: [
+      {
+        url: 'https://typetune.ollypedia.in/og-default.png',
+        width: 1200,
+        height: 630,
+        alt: 'Typing Games for Students – Typetune',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Typing Speed Games — Free Online Car Racing, Space & RPG Arcade',
+    title: 'Typing Games for Students – Free Arcade',
     description:
-      'Race sports cars, shoot space meteors, and fight RPG bosses with free musical typing speed games on TypeTunes.',
+      'Play free educational typing games for students. Race sports cars, defend space sectors, and battle RPG monsters on Typetune.',
+    images: ['https://typetune.ollypedia.in/og-default.png'],
   },
 };
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'VideoGame',
-  name: 'TypeTunes Typing Speed Games & Arcade',
-  url: 'https://typetunes.in/games',
+  name: 'Typetune Typing Games & Arcade',
+  url: 'https://typetune.ollypedia.in/games',
   description:
-    'Free online typing speed arcade featuring high-speed car racing, space defense, boss battles, and musical note cascade games.',
+    'Free online typing speed arcade for students and typists featuring high-speed car racing, space defense, boss battles, and musical note cascade games.',
   genre: ['Educational', 'Typing', 'Arcade', 'Racing', 'RPG'],
   gamePlatform: ['Web Browser', 'Desktop', 'Mobile'],
   applicationCategory: 'Game',

@@ -97,7 +97,7 @@ export default function NewspaperStudio() {
     <div className="w-full min-h-[calc(100vh-4rem)] flex flex-col">
       {/* ─── 1. LANDING PAGE VIEW ────────────────────────────────────────── */}
       {currentView === 'landing' && (
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-3">
           <NewspaperLandingPage
             onStartCreating={handleStartCreating}
             onSelectTemplate={handleSelectTemplateFromLanding}

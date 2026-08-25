@@ -30,7 +30,7 @@ function getArg(name: string, fallback: string): string {
 }
 
 const BASE_URL = getArg('url', process.env.BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
-const CANONICAL_DOMAIN = getArg('canonical', process.env.CANONICAL_DOMAIN || 'https://typetunes.in').replace(/\/$/, '');
+const CANONICAL_DOMAIN = getArg('canonical', process.env.CANONICAL_DOMAIN || 'https://typetune.ollypedia.in').replace(/\/$/, '');
 const PAGESPEED_API_KEY = process.env.PAGESPEED_API_KEY || process.env.PSI_API_KEY || '';
 const GSC_CREDENTIALS = process.env.GSC_CREDENTIALS || process.env.GOOGLE_APPLICATION_CREDENTIALS || '';
 const GSC_SITE_URL = process.env.GSC_SITE_URL || CANONICAL_DOMAIN;

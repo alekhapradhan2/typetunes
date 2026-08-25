@@ -2,49 +2,54 @@ import type { Metadata } from 'next';
 import CustomStudioClient from '@/components/custom/CustomStudioClient';
 
 export const metadata: Metadata = {
-  title: 'Programming Typing Practice & Custom Speed Studio — Code, Drills & Weak Keys | TypeTunes',
+  title: 'Custom Typing Practice – Code & Weak Keys',
   description:
-    'Practice programming typing speed with real code snippets in JavaScript, Python, TypeScript, React, HTML/CSS, and SQL. Drill weak keys, isolate pinky characters, paste custom text, and master muscle memory with acoustic piano feedback.',
+    'Create personalized typing exercises and coding drills. Practice programming syntax, paste custom text, isolate weak finger keys, and train muscle memory.',
   keywords: [
+    'create custom typing practice',
+    'custom typing test',
+    'personalized typing exercises',
     'programming typing test',
     'coding typing practice',
-    'code speed test',
-    'javascript typing test',
-    'python typing test',
     'weak key practice',
-    'custom typing test',
-    'programmer typing speed',
     'touch typing drills',
-    'syntax typing speed',
-    'react typing test',
-    'sql typing practice',
+    'Typetune custom typing',
   ],
   alternates: {
-    canonical: 'https://typetunes.in/custom',
+    canonical: 'https://typetune.ollypedia.in/custom',
   },
   openGraph: {
-    title: 'Programming Typing Practice & Custom Speed Studio — Code, Drills & Weak Keys | TypeTunes',
+    title: 'Custom Typing Practice – Code & Weak Keys',
     description:
-      'Practice coding speed with JavaScript, Python, TypeScript, React, and SQL. Drill weak keys and custom text with soft acoustic feedback.',
-    url: 'https://typetunes.in/custom',
-    siteName: 'TypeTunes',
+      'Create personalized typing exercises and custom typing drills. Practice coding syntax, paste custom text, isolate weak finger keys, and train muscle memory.',
+    url: 'https://typetune.ollypedia.in/custom',
+    siteName: 'Typetune',
     type: 'website',
+    images: [
+      {
+        url: 'https://typetune.ollypedia.in/og-default.png',
+        width: 1200,
+        height: 630,
+        alt: 'Create Custom Typing Practice – Typetune',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Programming Typing Practice & Custom Speed Studio',
+    title: 'Custom Typing Practice – Code & Weak Keys',
     description:
-      'Level up your developer typing speed. Practice real code, weak-finger drills, and custom text on TypeTunes.',
+      'Level up your developer typing speed. Practice real code, weak-finger drills, and custom text on Typetune.',
+    images: ['https://typetune.ollypedia.in/og-default.png'],
   },
 };
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
-  name: 'TypeTunes Programming & Custom Typing Studio',
-  url: 'https://typetunes.in/custom',
+  name: 'Typetune Custom Typing Studio',
+  url: 'https://typetune.ollypedia.in/custom',
   description:
-    'Free programming typing speed practice studio and targeted weak-key drill generator for developers and touch typists.',
+    'Create personalized typing exercises, practice coding syntax in JavaScript, Python, and SQL, and generate targeted weak-key drills.',
   applicationCategory: 'EducationalApplication',
   operatingSystem: 'Any',
   offers: {

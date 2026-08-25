@@ -13,13 +13,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = `${result.netWpm} WPM · ${result.accuracy}% acc — TypeTunes Result`;
   const description = `Scored ${result.netWpm} WPM with ${result.accuracy}% accuracy on TypeTunes. ${result.takeawayMessage}`;
-  const url = `https://typetunes.in/results/${id}`;
-  const imageUrl = `https://typetunes.in/results/${id}/opengraph-image`;
+  const url = `https://typetune.ollypedia.in/results/${id}`;
+  const imageUrl = `https://typetune.ollypedia.in/results/${id}/opengraph-image`;
 
   return {
     title,
     description,
     alternates: { canonical: url },
+    robots: {
+      index: false,
+      follow: false,
+    },
     openGraph: {
       title,
       description,

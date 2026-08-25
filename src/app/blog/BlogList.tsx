@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import type { BlogPost } from '@/lib/types';
 import Link from 'next/link';
 import { Clock, Search, Keyboard, BookOpen } from 'lucide-react';
+import { InFeedAd } from '@/components/ads/InFeedAd';
 
 interface BlogListProps {
   posts: BlogPost[];
@@ -102,62 +103,71 @@ export default function BlogList({ posts }: BlogListProps) {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredPosts.map((post) => {
+          {filteredPosts.map((post, index) => {
             const catColor = CATEGORY_COLORS[post.category] ?? '#6aa850';
             return (
-              <div
-                key={post.slug}
-                className="card p-6 flex flex-col justify-between hover:shadow-xl transition-all duration-200 border border-slate-200/80 group bg-white"
-              >
-                <div>
-                  {/* Top Metadata Row */}
-                  <div className="flex items-center justify-between mb-3">
-                    <span
-                      className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full"
-                      style={{ background: catColor + '18', color: catColor }}
-                    >
-                      {post.category}
-                    </span>
-                    <span className="text-xs text-slate-400 flex items-center gap-1">
-                      <Clock size={11} /> {post.readingTime} min
-                    </span>
+              <>
+                <div
+                  key={post.slug}
+                  className="card p-6 flex flex-col justify-between hover:shadow-xl transition-all duration-200 border border-slate-200/80 group bg-white"
+                >
+                  <div>
+                    {/* Top Metadata Row */}
+                    <div className="flex items-center justify-between mb-3">
+                      <span
+                        className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full"
+                        style={{ background: catColor + '18', color: catColor }}
+                      >
+                        {post.category}
+                      </span>
+                      <span className="text-xs text-slate-400 flex items-center gap-1">
+                        <Clock size={11} /> {post.readingTime} min
+                      </span>
+                    </div>
+
+                    {/* Title */}
+                    <Link href={`/blog/${post.slug}`} className="block">
+                      <h2
+                        className="text-lg font-bold text-slate-800 group-hover:text-sage-700 transition-colors mb-2 leading-snug"
+                        style={{ fontFamily: 'var(--font-display)' }}
+                      >
+                        {post.title}
+                      </h2>
+                    </Link>
+
+                    {/* Description */}
+                    <p className="text-xs sm:text-sm text-slate-500 leading-relaxed line-clamp-2 mb-5">
+                      {post.description}
+                    </p>
                   </div>
 
-                  {/* Title */}
-                  <Link href={`/blog/${post.slug}`} className="block">
-                    <h2
-                      className="text-lg font-bold text-slate-800 group-hover:text-sage-700 transition-colors mb-2 leading-snug"
-                      style={{ fontFamily: 'var(--font-display)' }}
+                  {/* Bottom Action Bar with 2 options */}
+                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="btn-ghost text-xs py-2 px-3.5 flex items-center justify-center gap-1.5 flex-1"
                     >
-                      {post.title}
-                    </h2>
-                  </Link>
+                      <BookOpen size={14} />
+                      Read Article
+                    </Link>
 
-                  {/* Description */}
-                  <p className="text-xs sm:text-sm text-slate-500 leading-relaxed line-clamp-2 mb-5">
-                    {post.description}
-                  </p>
+                    <Link
+                      href={`/blog/${post.slug}?tab=practice`}
+                      className="btn-primary text-xs py-2 px-3.5 flex items-center justify-center gap-1.5 shadow-2xs flex-1 text-center"
+                    >
+                      <Keyboard size={14} />
+                      Practice Typing
+                    </Link>
+                  </div>
                 </div>
 
-                {/* Bottom Action Bar with 2 options */}
-                <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    className="btn-ghost text-xs py-2 px-3.5 flex items-center justify-center gap-1.5 flex-1"
-                  >
-                    <BookOpen size={14} />
-                    Read Article
-                  </Link>
-
-                  <Link
-                    href={`/blog/${post.slug}?tab=practice`}
-                    className="btn-primary text-xs py-2 px-3.5 flex items-center justify-center gap-1.5 shadow-2xs flex-1 text-center"
-                  >
-                    <Keyboard size={14} />
-                    Practice Typing
-                  </Link>
-                </div>
-              </div>
+                {/* InFeed Ad every 6 posts */}
+                {(index + 1) % 6 === 0 && index < filteredPosts.length - 1 && (
+                  <div key={`ad-${index}`} className="sm:col-span-2 lg:col-span-3">
+                    <InFeedAd className="my-2" />
+                  </div>
+                )}
+              </>
             );
           })}
         </div>

@@ -1,14 +1,14 @@
 import type { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://typetunes.in';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://typetune.ollypedia.in';
 
   return {
     rules: [
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/', '/admin/'],
+        disallow: ['/api/', '/admin/', '/results/'],
       },
       {
         userAgent: 'GPTBot',

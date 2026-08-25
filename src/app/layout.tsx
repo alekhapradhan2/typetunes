@@ -6,6 +6,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 import NavBar from '@/components/ui/NavBar';
 import Footer from '@/components/ui/Footer';
+import Script from 'next/script';
+import { GlobalMultiplexWrapper } from '@/components/ads/GlobalMultiplexWrapper';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -20,56 +22,67 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://typetunes.in'),
-  title: 'TypeTunes — Free Online Typing Speed Test with Piano Sounds',
+  metadataBase: new URL('https://typetune.ollypedia.in'),
+  title: {
+    default: 'Typetune – Typing Speed Tests, Games & Newspaper Studio',
+    template: '%s | Typetune',
+  },
   description:
-    'Test and improve your typing speed with TypeTunes — the WPM typing test that plays piano music as you type. Real-time analytics, error heatmaps, and results.',
+    'Improve typing speed with musical piano tests, educational typing games, multiplayer races, custom drills, and student Newspaper Studio on Typetune.',
   keywords: [
     'typing speed test',
+    'typing games',
+    'typing games for students',
+    'typing challenges',
+    'multiplayer typing game',
+    'custom typing practice',
+    'newspaper studio',
+    'online newspaper maker',
     'WPM test',
     'typing practice',
-    'online typing test',
     'words per minute',
-    'typing speed',
-    'typing game',
-    'keyboard speed test',
     'touch typing',
-    'TypeTunes',
+    'Typetune',
   ],
-  authors: [{ name: 'TypeTunes' }],
-  creator: 'TypeTunes',
-  publisher: 'TypeTunes',
+  authors: [{ name: 'Typetune', url: 'https://typetune.ollypedia.in' }],
+  creator: 'Typetune',
+  publisher: 'Typetune',
   icons: {
     icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
       { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
       { url: '/favicon.ico', sizes: 'any' },
     ],
-    shortcut: '/favicon.svg',
-    apple: '/favicon.svg',
+    shortcut: '/favicon.ico',
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://typetunes.in',
-    siteName: 'TypeTunes',
-    title: 'TypeTunes — Free Online Typing Speed Test with Piano Sounds',
+    url: 'https://typetune.ollypedia.in',
+    siteName: 'Typetune',
+    title: 'Typetune – Typing Speed Tests, Games & Newspaper Studio',
     description:
-      'The calm typing test that plays soft piano notes on every keystroke. Test your WPM, see detailed analytics, and enjoy the music of your own typing.',
+      'Improve typing speed with musical piano tests, educational typing games, multiplayer races, custom drills, and student Newspaper Studio on Typetune.',
     images: [
       {
-        url: 'https://typetunes.in/og-default.png',
+        url: 'https://typetune.ollypedia.in/og-default.png',
         width: 1200,
         height: 630,
-        alt: 'TypeTunes — Musical Typing Speed Test',
+        alt: 'Typetune – Typing Speed Tests, Games & Newspaper Studio',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'TypeTunes — Free Online Typing Speed Test with Piano Sounds',
+    title: 'Typetune – Typing Speed Tests, Games & Newspaper Studio',
     description:
-      'The calm typing test that plays soft piano notes on every keystroke.',
-    images: ['https://typetunes.in/og-default.png'],
+      'Improve typing speed with musical piano tests, educational typing games, multiplayer races, custom drills, and student Newspaper Studio on Typetune.',
+    images: ['https://typetune.ollypedia.in/og-default.png'],
   },
   robots: {
     index: true,
@@ -94,6 +107,13 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <Script
+          id="adsense-init"
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5823659147566885"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <link
           href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..800&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Pirata+One&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Special+Elite&family=UnifrakturCook:wght@700&family=UnifrakturMaguntia&display=swap"
           rel="stylesheet"
@@ -104,6 +124,7 @@ export default function RootLayout({
         <main id="main-content" className="flex-1">
           {children}
         </main>
+        <GlobalMultiplexWrapper />
         <Footer />
       </body>
     </html>

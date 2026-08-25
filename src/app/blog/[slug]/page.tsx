@@ -16,16 +16,16 @@ export async function generateStaticParams() {
 }
 
 function formatSeoTitle(rawTitle: string): string {
-  if (rawTitle.length <= 58) return rawTitle;
+  if (rawTitle.length <= 46) return rawTitle;
   if (rawTitle.includes(':')) {
     const mainPart = rawTitle.split(':')[0].trim();
-    if (mainPart.length >= 20 && mainPart.length <= 58) return mainPart;
+    if (mainPart.length >= 15 && mainPart.length <= 46) return mainPart;
   }
   if (rawTitle.includes('—')) {
     const mainPart = rawTitle.split('—')[0].trim();
-    if (mainPart.length >= 20 && mainPart.length <= 58) return mainPart;
+    if (mainPart.length >= 15 && mainPart.length <= 46) return mainPart;
   }
-  return rawTitle.slice(0, 55).trim() + '...';
+  return rawTitle.slice(0, 44).trim() + '...';
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -34,8 +34,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return { title: 'Article Not Found' };
 
   const title = formatSeoTitle(post.title);
-  const url = `https://typetunes.in/blog/${slug}`;
-  const imageUrl = 'https://typetunes.in/og-default.png';
+  const url = `https://typetune.ollypedia.in/blog/${slug}`;
+  const imageUrl = 'https://typetune.ollypedia.in/og-default.png';
 
   return {
     title,
@@ -46,6 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: post.description,
       type: 'article',
       url,
+      siteName: 'Typetune',
       publishedTime: post.publishedAt,
       images: [
         {
@@ -220,18 +221,18 @@ export default async function BlogPostPage({ params }: Props) {
     ],
     publisher: {
       '@type': 'Organization',
-      name: 'TypeTunes',
-      url: 'https://typetunes.in',
+      name: 'Typetune',
+      url: 'https://typetune.ollypedia.in',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://typetunes.in/og-default.png',
+        url: 'https://typetune.ollypedia.in/og-default.png',
       },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://typetunes.in/blog/${post.slug}`,
+      '@id': `https://typetune.ollypedia.in/blog/${post.slug}`,
     },
-    image: 'https://typetunes.in/og-default.png',
+    image: 'https://typetune.ollypedia.in/og-default.png',
   };
 
 

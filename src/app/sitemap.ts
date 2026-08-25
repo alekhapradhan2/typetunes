@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { getAllBlogSlugs } from '@/data/blog-posts';
 
-const BASE_URL = 'https://typetunes.in';
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://typetune.ollypedia.in';
 
 const TEST_MODES = [
   '15s',
@@ -37,6 +37,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${BASE_URL}/games`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.95,
+    },
+    {
+      url: `${BASE_URL}/newspaper`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.95,

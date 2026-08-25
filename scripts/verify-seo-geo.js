@@ -43,7 +43,7 @@ async function runVerification() {
     const hasClaudeBot = robotsBody.includes('ClaudeBot');
     const hasPerplexity = robotsBody.includes('PerplexityBot');
     const hasGoogleExt = robotsBody.includes('Google-Extended');
-    const hasSitemap = robotsBody.includes('https://typetunes.in/sitemap.xml');
+    const hasSitemap = robotsBody.includes('https://typetune.ollypedia.in/sitemap.xml');
     const noUndesiredDisallow = !robotsBody.includes('Disallow: /_next');
 
     record(
@@ -63,20 +63,23 @@ async function runVerification() {
     const matches = sitemapRes.body.match(/<loc>(.*?)<\/loc>/g) || [];
     sitemapUrls = matches.map((m) => m.replace(/<\/?loc>/g, ''));
 
-    const allInDomain = sitemapUrls.every((u) => u.startsWith('https://typetunes.in'));
-    const hasHome = sitemapUrls.includes('https://typetunes.in');
-    const hasFaq = sitemapUrls.includes('https://typetunes.in/faq');
-    const hasBlog = sitemapUrls.includes('https://typetunes.in/blog');
-    const hasAbout = sitemapUrls.includes('https://typetunes.in/about');
-    const hasContact = sitemapUrls.includes('https://typetunes.in/contact');
-    const hasPrivacy = sitemapUrls.includes('https://typetunes.in/privacy-policy');
-    const hasTerms = sitemapUrls.includes('https://typetunes.in/terms');
+    const allInDomain = sitemapUrls.every((u) => u.startsWith('https://typetune.ollypedia.in'));
+    const hasHome = sitemapUrls.includes('https://typetune.ollypedia.in');
+    const hasFaq = sitemapUrls.includes('https://typetune.ollypedia.in/faq');
+    const hasBlog = sitemapUrls.includes('https://typetune.ollypedia.in/blog');
+    const hasGames = sitemapUrls.includes('https://typetune.ollypedia.in/games');
+    const hasNewspaper = sitemapUrls.includes('https://typetune.ollypedia.in/newspaper');
+    const hasCustom = sitemapUrls.includes('https://typetune.ollypedia.in/custom');
+    const hasAbout = sitemapUrls.includes('https://typetune.ollypedia.in/about');
+    const hasContact = sitemapUrls.includes('https://typetune.ollypedia.in/contact');
+    const hasPrivacy = sitemapUrls.includes('https://typetune.ollypedia.in/privacy-policy');
+    const hasTerms = sitemapUrls.includes('https://typetune.ollypedia.in/terms');
 
     record(
       'A2: Sitemap.xml',
       'Sitemap URL compilation & canonical domain',
-      sitemapRes.statusCode === 200 && sitemapUrls.length >= 15 && allInDomain && hasHome && hasFaq && hasBlog && hasAbout && hasContact && hasPrivacy && hasTerms,
-      `Total URLs in sitemap: ${sitemapUrls.length} | All on https://typetunes.in: ${allInDomain}`
+      sitemapRes.statusCode === 200 && sitemapUrls.length >= 15 && allInDomain && hasHome && hasFaq && hasBlog && hasGames && hasNewspaper && hasCustom && hasAbout && hasContact && hasPrivacy && hasTerms,
+      `Total URLs in sitemap: ${sitemapUrls.length} | All on https://typetune.ollypedia.in: ${allInDomain}`
     );
   } catch (err) {
     record('A2: Sitemap.xml', 'Sitemap fetch', false, err.message);
@@ -85,7 +88,7 @@ async function runVerification() {
   // 3. llms.txt Validation (GEO B3)
   try {
     const llmsRes = await fetchText('/llms.txt');
-    const hasSummary = llmsRes.body.includes('https://typetunes.in') && llmsRes.body.includes('TypeTunes');
+    const hasSummary = llmsRes.body.includes('https://typetune.ollypedia.in') && llmsRes.body.includes('Typetune');
     const hasBenchmarks = llmsRes.body.includes('WPM Calculation') || llmsRes.body.includes('Benchmarks');
     record(
       'B3: llms.txt',
@@ -100,6 +103,9 @@ async function runVerification() {
   // 4. Page-by-Page HTML, Canonical, Metadata, OG, Schema Validation
   const pagesToTest = [
     { path: '/', label: 'Homepage', schemaType: 'WebApplication' },
+    { path: '/games', label: 'Games Arcade', schemaType: 'VideoGame' },
+    { path: '/newspaper', label: 'Newspaper Studio', schemaType: 'WebApplication' },
+    { path: '/custom', label: 'Custom Studio', schemaType: 'SoftwareApplication' },
     { path: '/faq', label: 'FAQ Page', schemaType: 'FAQPage' },
     { path: '/about', label: 'About Page', schemaType: null },
     { path: '/contact', label: 'Contact Page', schemaType: null },
@@ -108,9 +114,9 @@ async function runVerification() {
     { path: '/blog', label: 'Blog Library', schemaType: null },
     { path: '/blog/what-is-a-good-wpm', label: 'Blog Post: What is a Good WPM', schemaType: 'BlogPosting' },
     { path: '/blog/how-to-improve-typing-speed', label: 'Blog Post: Improve Speed', schemaType: 'BlogPosting' },
-    { path: '/test/60s', label: 'Test Mode: 60s', schemaType: null },
-    { path: '/test/15s', label: 'Test Mode: 15s', schemaType: null },
-    { path: '/test/zen', label: 'Test Mode: Zen', schemaType: null },
+    { path: '/test/60s', label: 'Test Mode: 60s', schemaType: 'WebApplication' },
+    { path: '/test/15s', label: 'Test Mode: 15s', schemaType: 'WebApplication' },
+    { path: '/test/zen', label: 'Test Mode: Zen', schemaType: 'WebApplication' },
   ];
 
   const titles = new Set();
@@ -163,15 +169,15 @@ async function runVerification() {
       const descValid = description.length >= 100 && description.length <= 180;
 
       const expectedCanonicalEnd = p.path === '/' ? '' : p.path;
-      const expectedCanonical = `https://typetunes.in${expectedCanonicalEnd}`;
-      const canonicalValid = canonical === expectedCanonical || canonical === `https://typetunes.in${p.path}`;
+      const expectedCanonical = `https://typetune.ollypedia.in${expectedCanonicalEnd}`;
+      const canonicalValid = canonical === expectedCanonical || canonical === `https://typetune.ollypedia.in${p.path}`;
 
       let schemaValid = true;
       if (p.schemaType) {
         schemaValid = parsedSchemas.some((s) => s['@type'] === p.schemaType || (s['@graph'] && s['@graph'].some(g => g['@type'] === p.schemaType)));
       }
 
-      const ogValid = Boolean(ogTitle && ogDesc && ogImage && ogImage[1].startsWith('https://typetunes.in'));
+      const ogValid = Boolean(ogTitle && ogDesc && ogImage && ogImage[1].startsWith('https://typetune.ollypedia.in'));
 
       const allGood = res.statusCode === 200 && titleValid && descValid && canonicalValid && !hasNoindex && schemaValid && ogValid;
 

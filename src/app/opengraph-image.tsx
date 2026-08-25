@@ -98,7 +98,7 @@ export default async function Image() {
           }}
         >
           <span style={{ fontSize: 20, fontWeight: 600, color: '#6aa850' }}>
-            https://typetunes.in
+            https://typetune.ollypedia.in
           </span>
           <span style={{ fontSize: 18, color: '#64748b' }}>
             Free · No Account Required · Piano Feedback

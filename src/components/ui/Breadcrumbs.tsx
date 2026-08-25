@@ -11,6 +11,7 @@ interface BreadcrumbsProps {
 }
 
 export default function Breadcrumbs({ items }: BreadcrumbsProps) {
+  const baseUrl = 'https://typetune.ollypedia.in';
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -19,14 +20,14 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://typetunes.in',
+        item: baseUrl,
       },
       ...items.map((item, index) => ({
         '@type': 'ListItem',
         position: index + 2,
         name: item.label,
         item: item.href
-          ? `https://typetunes.in${item.href}`
+          ? `${baseUrl}${item.href}`
           : undefined,
       })),
     ],

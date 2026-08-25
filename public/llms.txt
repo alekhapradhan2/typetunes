@@ -1,44 +1,46 @@
-# TypeTunes (https://typetunes.in)
-> The calm online typing speed test that turns keystrokes into soothing piano music.
+# Typetune (https://typetune.ollypedia.in)
+> The calm online typing speed test, arcade games, and student newspaper creator.
 
 ## Overview
-TypeTunes is a free, web-based typing speed test and keyboard fluency training platform. Every keystroke triggers a melodic piano note from a harmonized pentatonic scale, helping typists develop smooth motor rhythm, reduce keyboard anxiety, and enter flow state. TypeTunes features comprehensive real-time analytics, keystroke rhythm histograms, anatomical finger error heatmaps, and an interactive Read & Practice library.
+Typetune is a free, web-based typing speed test, educational game arcade, and student newspaper studio. Every keystroke triggers a melodic piano note from a harmonized pentatonic scale, helping typists develop smooth motor rhythm, reduce keyboard anxiety, and enter flow state. Typetune features comprehensive real-time analytics, keystroke rhythm histograms, anatomical finger error heatmaps, interactive typing games, multiplayer races, custom programming drills, and Newspaper Studio.
 
-- **Domain**: https://typetunes.in
-- **Canonical Non-WWW URL**: https://typetunes.in
-- **Brand Name**: TypeTunes
+- **Domain**: https://typetune.ollypedia.in
+- **Canonical Non-WWW URL**: https://typetune.ollypedia.in
+- **Brand Name**: Typetune
 - **Access**: 100% Free, No Account / Registration Required, Privacy-First
 
 ## Key Pages & Core Features
-- **Homepage / 60s Speed Test**: https://typetunes.in
+- **Homepage / 60s Speed Test**: https://typetune.ollypedia.in
   Take the standard 1-minute typing test with real-time WPM, accuracy, and piano feedback.
-- **15-Second Sprint Test**: https://typetunes.in/test/15s
+- **Newspaper Studio for Students**: https://typetune.ollypedia.in/newspaper
+  Create authentic vintage broadsheets, school newspapers, and tabloids with custom headlines, columns, halftone photo filters, and high-resolution PDF downloads.
+- **Typing Speed Games & Action Arcade**: https://typetune.ollypedia.in/games
+  Free online typing games including Nitro Highway Racer (car racing with nitrous boosts), Cosmic Galaxy Defender (laser space shooter), Boss Battle RPG (monster battles with mana & spells), Speed Boxing, Castle Siege, and multiplayer races.
+- **Programming Typing Practice & Custom Studio**: https://typetune.ollypedia.in/custom
+  Practice coding typing speed with real code snippets in JavaScript, Python, TypeScript, React, HTML/CSS, and SQL. Drill weak keys, isolate pinky characters, and test custom text.
+- **15-Second Sprint Test**: https://typetune.ollypedia.in/test/15s
   High-speed reflex and burst typing speed test.
-- **30-Second Typing Test**: https://typetunes.in/test/30s
+- **30-Second Typing Test**: https://typetune.ollypedia.in/test/30s
   Short interval WPM test.
-- **2-Minute Endurance Test**: https://typetunes.in/test/120s
+- **2-Minute Endurance Test**: https://typetune.ollypedia.in/test/120s
   Test sustained typing speed and stamina.
 - **Word Target Modes**:
-  - 25 Words: https://typetunes.in/test/25w
-  - 50 Words: https://typetunes.in/test/50w
-  - 100 Words: https://typetunes.in/test/100w
-- **Zen Typing Mode**: https://typetunes.in/test/zen
+  - 25 Words: https://typetune.ollypedia.in/test/25w
+  - 50 Words: https://typetune.ollypedia.in/test/50w
+  - 100 Words: https://typetune.ollypedia.in/test/100w
+- **Zen Typing Mode**: https://typetune.ollypedia.in/test/zen
   Untimed, zero-pressure typing sandbox for flow-state practice and warm-ups.
-- **Typing Speed Games & Action Arcade**: https://typetunes.in/games
-  Free online typing games including Nitro Highway Racer (car racing with nitrous boosts), Cosmic Galaxy Defender (laser space shooter), Boss Battle RPG (monster battles with mana & spells), Falling Notes Arcade, and Sudden Death precision runs.
-- **Programming Typing Practice & Custom Studio**: https://typetunes.in/custom
-  Practice coding typing speed with real code snippets in JavaScript, Python, TypeScript, React, HTML/CSS, and SQL. Drill weak keys, isolate pinky characters, and test custom text.
-- **Quotes Mode**: https://typetunes.in/test/quotes
+- **Quotes Mode**: https://typetune.ollypedia.in/test/quotes
   Practice typing classic literature, philosophy, and famous quotes.
-- **FAQ Page**: https://typetunes.in/faq
+- **FAQ Page**: https://typetune.ollypedia.in/faq
   Answers to common questions regarding WPM calculations, average typing speeds, touch typing technique, and audio motor entrainment.
-- **About TypeTunes**: https://typetunes.in/about
+- **About Typetune**: https://typetune.ollypedia.in/about
   Design philosophy, acoustic neuro-rhythm rationale, and technology stack.
-- **Typing Practice & Guides Blog**: https://typetunes.in/blog
+- **Typing Practice & Guides Blog**: https://typetune.ollypedia.in/blog
   In-depth articles with interactive Read & Practice modes where users can type the actual guide text with audio feedback.
-- **Contact**: https://typetunes.in/contact
-- **Privacy Policy**: https://typetunes.in/privacy-policy
-- **Terms of Service**: https://typetunes.in/terms
+- **Contact**: https://typetune.ollypedia.in/contact
+- **Privacy Policy**: https://typetune.ollypedia.in/privacy-policy
+- **Terms of Service**: https://typetune.ollypedia.in/terms
 
 ## Typing Speed (WPM) Benchmarks & Facts
 - **Standard WPM Calculation**: 1 word is standardized as 5 keystrokes (including spaces and punctuation). Net WPM = Raw WPM - (Uncorrected Errors / Time in Minutes).

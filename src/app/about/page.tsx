@@ -4,17 +4,40 @@ import { Music2, Heart, Shield, Zap, BookOpen } from 'lucide-react';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 
 export const metadata: Metadata = {
-  title: 'About TypeTunes — The Calm Musical Typing Speed Test',
+  title: 'About Typetune — Musical Typing Philosophy',
   description:
-    'Learn why we built TypeTunes — combining touch typing practice with melodic piano audio, calm aesthetics, deep error diagnostics, and zero distractions.',
-  alternates: { canonical: 'https://typetunes.in/about' },
+    'Learn why we built Typetune — combining touch typing practice with melodic piano audio, calm aesthetics, deep error diagnostics, and zero distractions.',
+  alternates: { canonical: 'https://typetune.ollypedia.in/about' },
+  openGraph: {
+    title: 'About Typetune — Musical Typing Philosophy',
+    description:
+      'Learn why we built Typetune — combining touch typing practice with melodic piano audio, calm aesthetics, deep error diagnostics, and zero distractions.',
+    url: 'https://typetune.ollypedia.in/about',
+    siteName: 'Typetune',
+    type: 'website',
+    images: [
+      {
+        url: 'https://typetune.ollypedia.in/og-default.png',
+        width: 1200,
+        height: 630,
+        alt: 'About Typetune',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About Typetune — Musical Typing Philosophy',
+    description:
+      'Learn why we built Typetune — combining touch typing practice with melodic piano audio, calm aesthetics, deep error diagnostics, and zero distractions.',
+    images: ['https://typetune.ollypedia.in/og-default.png'],
+  },
 };
 
 export default function AboutPage() {
   return (
     <div className="bg-hero min-h-screen">
       <div className="mx-auto max-w-5xl px-4 sm:px-8 lg:px-12 py-12">
-        <Breadcrumbs items={[{ label: 'About TypeTunes' }]} />
+        <Breadcrumbs items={[{ label: 'About Typetune' }]} />
 
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-6">
@@ -25,11 +48,11 @@ export default function AboutPage() {
               className="text-4xl font-bold text-slate-800"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              About TypeTunes
+              About Typetune
             </h1>
           </div>
           <p className="text-slate-500 text-lg leading-relaxed">
-            TypeTunes is an open, melodic typing speed test engineered to cultivate keyboard fluency and rhythm through acoustic feedback.
+            Typetune is an open, melodic typing speed test engineered to cultivate keyboard fluency and rhythm through acoustic feedback.
           </p>
         </div>
 

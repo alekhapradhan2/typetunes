@@ -108,7 +108,7 @@ export default async function OgImage({
               color: '#94a3b8',
             }}
           >
-            https://typetunes.in · The musical typing speed test
+            https://typetune.ollypedia.in · The musical typing speed test
           </span>
         </div>
       </div>
