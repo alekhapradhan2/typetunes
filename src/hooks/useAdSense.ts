@@ -20,18 +20,25 @@ export function useAdSense() {
     setAdLoaded(false);
     setAdUnfilled(false);
 
-    // Use a DOM attribute to track whether this specific element has been pushed to AdSense.
-    // This prevents race conditions where React Strict Mode or Fast Refresh
-    // runs useEffect twice but the DOM node is the same.
-    if (insRef.current && !insRef.current.hasAttribute("data-pushed")) {
-      try {
-        insRef.current.setAttribute("data-pushed", "true");
-        ((window as unknown as Record<string, unknown>).adsbygoogle =
-          (window as unknown as Record<string, unknown[]>).adsbygoogle || []).push({} as never);
-      } catch (e) {
-        console.error("AdSense initialization error", e);
+    // Timeout ensures DOM layout is stable for responsive dimension calculations
+    const timer = setTimeout(() => {
+      const el = insRef.current;
+      if (
+        el &&
+        !el.hasAttribute("data-adsbygoogle-status") &&
+        !el.hasAttribute("data-pushed")
+      ) {
+        try {
+          el.setAttribute("data-pushed", "true");
+          ((window as unknown as Record<string, unknown>).adsbygoogle =
+            (window as unknown as Record<string, unknown[]>).adsbygoogle || []).push({});
+        } catch (e) {
+          console.error("AdSense initialization error", e);
+        }
       }
-    }
+    }, 50);
+
+    return () => clearTimeout(timer);
   }, [pathname, isMounted]);
 
   useEffect(() => {
@@ -44,6 +51,7 @@ export function useAdSense() {
       const status = el.getAttribute("data-ad-status");
       if (status === "filled") {
         setAdLoaded(true);
+        setAdUnfilled(false);
       } else if (status === "unfilled") {
         setAdUnfilled(true);
       }

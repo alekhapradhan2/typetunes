@@ -432,7 +432,7 @@ export default function HomePage() {
 
         {/* Middle Page In-Content Banner Ad */}
         <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
-          <InContentAd slot="8392104825" />
+          <InContentAd />
         </div>
 
         {/* Featured Arcade & Action Typing Games Showcase */}

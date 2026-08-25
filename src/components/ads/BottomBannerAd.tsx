@@ -10,7 +10,7 @@ interface BottomBannerAdProps {
 }
 
 export function BottomBannerAd({
-  slot = "8392104822",
+  slot = "3815666049",
   className = "",
 }: BottomBannerAdProps) {
   const { adLoaded, adUnfilled, insRef, pathname, isMounted } = useAdSense();
@@ -24,7 +24,7 @@ export function BottomBannerAd({
       aria-hidden="true"
     >
       <div
-        className={`w-full min-h-[90px] sm:min-h-[120px] max-h-[160px] flex items-center justify-center rounded-2xl overflow-hidden ${
+        className={`w-full min-h-[60px] sm:min-h-[90px] flex items-center justify-center rounded-2xl overflow-hidden ${
           adLoaded ? "bg-white/5 border border-stone-200/40 dark:border-slate-800" : "bg-transparent"
         }`}
       >
@@ -33,7 +33,7 @@ export function BottomBannerAd({
             key={`bottom-banner-${pathname}`}
             ref={insRef}
             className="adsbygoogle w-full"
-            style={{ display: "block", minHeight: "90px", maxHeight: "160px" }}
+            style={{ display: "block" }}
             data-ad-client={AD_CLIENT}
             data-ad-slot={slot}
             data-ad-format="auto"

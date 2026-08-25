@@ -16,7 +16,7 @@ export function InFeedAd({ className = "" }: { className?: string }) {
 
   return (
     <div
-      className={`w-full min-h-[250px] overflow-hidden block rounded-xl transition-all duration-700 ${className} ${
+      className={`w-full min-h-[100px] overflow-hidden block rounded-xl transition-all duration-700 ${className} ${
         adLoaded
           ? "bg-white/5 border border-stone-200/40"
           : "bg-transparent"
@@ -27,7 +27,7 @@ export function InFeedAd({ className = "" }: { className?: string }) {
           key={pathname}
           ref={insRef}
           className="adsbygoogle w-full"
-          style={{ display: "block", minWidth: "250px" }}
+          style={{ display: "block" }}
           data-ad-format="fluid"
           data-ad-layout-key="-6t+ed+2i-1n-4w"
           data-ad-client={AD_CLIENT}

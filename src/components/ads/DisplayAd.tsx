@@ -10,11 +10,11 @@ const AD_CLIENT = "ca-pub-5823659147566885";
  * Usage: <DisplayAd slot="SLOT_ID" />
  */
 export function DisplayAd({
-  slot,
+  slot = "3815666049",
   format = "auto",
   className = "",
 }: {
-  slot: string;
+  slot?: string;
   format?: string;
   className?: string;
 }) {

@@ -541,7 +541,7 @@ export default function GamesHubClient() {
       </div>
 
       {/* Middle Page In-Content Banner Ad */}
-      {!isFullscreen && <InContentAd slot="8392104828" className="my-3" />}
+      {!isFullscreen && <InContentAd className="my-3" />}
 
       {/* Live Multiplayer Track HUD (when playing in multiplayer) */}
       {playMode === 'multiplayer' && room && (room.status === 'playing' || room.status === 'finished') && (

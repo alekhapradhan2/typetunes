@@ -156,7 +156,7 @@ export default function CustomStudioClient() {
           </div>
 
           {/* Middle Page In-Content Banner Ad */}
-          <InContentAd slot="8392104826" />
+          <InContentAd />
         </>
       )}
     </div>

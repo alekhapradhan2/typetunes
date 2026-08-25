@@ -67,16 +67,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-/** Converts plain-text markdown (including tables, lists, headers) into semantic JSX */
+/** Converts plain-text markdown (including tables, lists, headers) into semantic JSX with responsive in-article ads */
 function renderContent(text: string) {
   const lines = text.split('\n');
   const elements: React.ReactNode[] = [];
   let i = 0;
+  let h2Count = 0;
 
   while (i < lines.length) {
     const line = lines[i];
 
     if (line.startsWith('## ')) {
+      h2Count++;
+      // Inject an in-content responsive ad after the 2nd major section for readers
+      if (h2Count === 2) {
+        elements.push(
+          <div key={`in-article-ad-${i}`} className="my-6">
+            <InContentAd />
+          </div>
+        );
+      }
+
       elements.push(
         <h2
           key={i}
@@ -242,7 +253,7 @@ export default async function BlogPostPage({ params }: Props) {
       <div className="prose-like">{renderContent(post.content)}</div>
 
       {/* Middle Page In-Content Banner Ad */}
-      <InContentAd slot="8392104829" className="my-6" />
+      <InContentAd className="my-6" />
 
       {/* CTA Box with direct links to practice & test modes */}
       <div className="card p-6 mt-8 text-center bg-gradient-to-r from-cream-light/80 to-white dark:from-slate-900 dark:to-slate-950 border border-slate-200 dark:border-slate-800">

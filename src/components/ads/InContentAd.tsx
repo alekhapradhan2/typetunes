@@ -11,7 +11,7 @@ interface InContentAdProps {
 }
 
 export function InContentAd({
-  slot = "8392104825",
+  slot = "3815666049",
   className = "",
   format = "auto",
 }: InContentAdProps) {
@@ -21,21 +21,21 @@ export function InContentAd({
 
   return (
     <aside
-      className={`my-8 w-full flex items-center justify-center transition-all duration-300 ${className}`}
+      className={`my-6 sm:my-8 w-full flex items-center justify-center transition-all duration-300 ${className}`}
       aria-label="In-content advertisement"
       aria-hidden="true"
     >
       <div
-        className={`w-full min-h-[140px] max-w-5xl mx-auto flex items-center justify-center rounded-2xl overflow-hidden ${
+        className={`w-full min-h-[60px] sm:min-h-[100px] max-w-5xl mx-auto flex items-center justify-center rounded-2xl overflow-hidden ${
           adLoaded ? "bg-white/5 border border-stone-200/40 dark:border-slate-800" : "bg-transparent"
         }`}
       >
         {isMounted && (
           <ins
-            key={`in-content-${pathname}`}
+            key={`in-content-${pathname}-${slot}`}
             ref={insRef}
             className="adsbygoogle w-full"
-            style={{ display: "block", minHeight: "140px" }}
+            style={{ display: "block" }}
             data-ad-client={AD_CLIENT}
             data-ad-slot={slot}
             data-ad-format={format}

@@ -167,7 +167,7 @@ export default function FaqPage() {
 
                 {i === 4 && (
                   <div className="py-2">
-                    <InContentAd slot="8392104827" />
+                    <InContentAd />
                   </div>
                 )}
               </React.Fragment>
