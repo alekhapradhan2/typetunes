@@ -5,6 +5,7 @@ import {
 import type { Metadata } from 'next';
 import './globals.css';
 import NavBar from '@/components/ui/NavBar';
+import NightModeBanner from '@/components/ui/NightModeBanner';
 import Footer from '@/components/ui/Footer';
 import Script from 'next/script';
 import { GlobalMultiplexWrapper } from '@/components/ads/GlobalMultiplexWrapper';
@@ -108,25 +109,28 @@ export default function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
       <head>
-        <script
-          suppressHydrationWarning
-          dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('theme');if(t==='dark'){document.documentElement.classList.add('dark');document.documentElement.setAttribute('data-theme','dark')}else{document.documentElement.classList.remove('dark');document.documentElement.setAttribute('data-theme','light')}}catch(e){}`,
-          }}
-        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5823659147566885"
-          crossOrigin="anonymous"
-        />
         <link
           href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..800&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Pirata+One&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Special+Elite&family=UnifrakturCook:wght@700&family=UnifrakturMaguntia&display=swap"
           rel="stylesheet"
         />
       </head>
       <body className="bg-cream text-slate-700 antialiased min-h-screen flex flex-col">
+        <Script
+          id="theme-initializer"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('theme');if(t==='dark'){document.documentElement.classList.add('dark');document.documentElement.setAttribute('data-theme','dark')}else{document.documentElement.classList.remove('dark');document.documentElement.setAttribute('data-theme','light')}}catch(e){}`,
+          }}
+        />
+        <Script
+          id="google-adsense"
+          strategy="afterInteractive"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5823659147566885"
+          crossOrigin="anonymous"
+        />
+        <NightModeBanner />
         <NavBar />
         <TopBannerAd />
         <DesktopSideRails />

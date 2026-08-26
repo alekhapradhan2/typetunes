@@ -12,15 +12,29 @@ export function useAdSense() {
 
   useEffect(() => {
     setIsMounted(true);
+    // AdSense ads do not serve on localhost; disable dummy white boxes in local dev
+    if (
+      typeof window !== "undefined" &&
+      (window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1")
+    ) {
+      setAdUnfilled(true);
+    }
   }, []);
 
   useEffect(() => {
     if (!isMounted) return;
+    if (
+      typeof window !== "undefined" &&
+      (window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1")
+    ) {
+      return;
+    }
 
     setAdLoaded(false);
     setAdUnfilled(false);
 
-    // Timeout ensures DOM layout is stable for responsive dimension calculations
     const timer = setTimeout(() => {
       const el = insRef.current;
       if (
@@ -54,6 +68,7 @@ export function useAdSense() {
         setAdUnfilled(false);
       } else if (status === "unfilled") {
         setAdUnfilled(true);
+        setAdLoaded(false);
       }
     };
 

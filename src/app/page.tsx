@@ -222,40 +222,13 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <div className="bg-hero">
-        {/* Primary Hero Section */}
-        <section className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-12 pt-12 pb-8 text-center">
-          <div className="chip mb-6 inline-flex animate-fade-in">
-            ♪ Every keystroke plays a note
-          </div>
+      <div className="bg-hero min-h-screen">
+        {/* Primary Expansive Typing Arena Section */}
+        <section className="mx-auto max-w-6xl px-4 sm:px-8 lg:px-12 pt-6 sm:pt-10 pb-12 text-center">
+          <h1 className="sr-only">Typetune – Musical Typing Speed Test & Games</h1>
 
-          <h1
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-slate-800 mb-5 animate-slide-up tracking-tight max-w-5xl mx-auto"
-            style={{ fontFamily: 'var(--font-display)', lineHeight: 1.15 }}
-          >
-            Improve Your Typing Speed with Games, Challenges and{' '}
-            <span
-              style={{
-                background: 'linear-gradient(135deg, #6aa850, #54b3d9)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              Interactive Practice
-            </span>
-          </h1>
-
-          <p
-            className="text-lg md:text-xl text-slate-500 max-w-3xl mx-auto mb-10 animate-slide-up leading-relaxed"
-            style={{ animationDelay: '80ms' }}
-          >
-            Typetune transforms standard typing practice into an engaging, musical experience.
-            Measure your WPM, play exciting educational typing games, race friends in real-time multiplayer,
-            drill programming syntax, and create authentic vintage broadsheets in Newspaper Studio.
-          </p>
-
-          {/* Interactive Typing Engine Widget */}
-          <div className="animate-scale-in max-w-5xl lg:max-w-6xl mx-auto w-full" style={{ animationDelay: '160ms' }}>
+          {/* Interactive Typing Engine */}
+          <div className="animate-scale-in w-full mx-auto">
             <TypingTest initialConfig={{ mode: 'time', timeDuration: 60 }} />
           </div>
         </section>

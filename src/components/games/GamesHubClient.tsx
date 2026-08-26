@@ -211,32 +211,98 @@ export default function GamesHubClient() {
   const [playerId, setPlayerId] = useState<string>('');
   const [countdown, setCountdown] = useState<number | null>(null);
 
-  // Toggle browser and CSS fullscreen
+  // Robust Cross-Browser Fullscreen toggle with CSS fallback
   const toggleFullscreen = useCallback(async () => {
     try {
-      if (!document.fullscreenElement) {
-        if (stageRef.current?.requestFullscreen) {
-          await stageRef.current.requestFullscreen();
+      const doc = document as any;
+      const el = stageRef.current as any;
+
+      const isCurrentlyFullscreen = !!(
+        doc.fullscreenElement ||
+        doc.webkitFullscreenElement ||
+        doc.mozFullScreenElement ||
+        doc.msFullscreenElement
+      );
+
+      if (!isCurrentlyFullscreen && !isFullscreen) {
+        if (el) {
+          if (el.requestFullscreen) {
+            await el.requestFullscreen();
+          } else if (el.webkitRequestFullscreen) {
+            await el.webkitRequestFullscreen();
+          } else if (el.mozRequestFullScreen) {
+            await el.mozRequestFullScreen();
+          } else if (el.msRequestFullscreen) {
+            await el.msRequestFullscreen();
+          }
         }
         setIsFullscreen(true);
       } else {
-        if (document.exitFullscreen) {
-          await document.exitFullscreen();
+        if (doc.exitFullscreen) {
+          await doc.exitFullscreen().catch(() => {});
+        } else if (doc.webkitExitFullscreen) {
+          await doc.webkitExitFullscreen().catch(() => {});
+        } else if (doc.mozCancelFullScreen) {
+          await doc.mozCancelFullScreen().catch(() => {});
+        } else if (doc.msExitFullscreen) {
+          await doc.msExitFullscreen().catch(() => {});
         }
         setIsFullscreen(false);
       }
     } catch {
+      // CSS Fallback toggle if native Fullscreen API is rejected or restricted
       setIsFullscreen((prev) => !prev);
     }
-  }, []);
+  }, [isFullscreen]);
 
+  // Sync with native browser fullscreen events
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      const doc = document as any;
+      const isNative = !!(
+        doc.fullscreenElement ||
+        doc.webkitFullscreenElement ||
+        doc.mozFullScreenElement ||
+        doc.msFullscreenElement
+      );
+      setIsFullscreen(isNative);
     };
+
     document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
+    };
   }, []);
+
+  // Lock body scroll and handle Escape key when in fullscreen
+  useEffect(() => {
+    if (isFullscreen) {
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          const doc = document as any;
+          if (doc.fullscreenElement || doc.webkitFullscreenElement) {
+            doc.exitFullscreen?.().catch?.(() => {});
+          }
+          setIsFullscreen(false);
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [isFullscreen]);
 
   // Poll multiplayer room status every 450ms when connected
   useEffect(() => {

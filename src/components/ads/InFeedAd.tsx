@@ -6,13 +6,18 @@ const AD_CLIENT = "ca-pub-5823659147566885";
 // In-feed fluid ad slot — same as Ollypedia
 const AD_SLOT = "3815666049";
 
+interface InFeedAdProps {
+  slot?: string;
+  className?: string;
+}
+
 /**
  * InFeedAd — fluid in-feed ad for blog listing pages or between content sections.
  */
-export function InFeedAd({ className = "" }: { className?: string }) {
+export function InFeedAd({ slot = AD_SLOT, className = "" }: InFeedAdProps) {
   const { adLoaded, adUnfilled, insRef, pathname, isMounted } = useAdSense();
 
-  if (adUnfilled) return null;
+  if (adUnfilled || !isMounted) return null;
 
   return (
     <div

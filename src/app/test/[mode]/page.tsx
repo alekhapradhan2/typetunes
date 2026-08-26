@@ -161,14 +161,14 @@ export default async function TestModePage({ params }: Props) {
             ]}
           />
 
-          <div className="mb-8">
+          <div className="mb-8 mt-2">
             <h1
-              className="text-3xl font-bold text-slate-800 mb-2"
+              className="text-3xl sm:text-4xl font-bold text-slate-800 dark:text-white mb-2"
               style={{ fontFamily: 'var(--font-display)' }}
             >
               {label}
             </h1>
-            <p className="text-slate-500 text-sm">
+            <p className="text-slate-500 dark:text-slate-400 text-sm sm:text-base">
               {config.mode === 'zen'
                 ? 'No timer, no pressure. Type at your own pace — the music will keep you company.'
                 : config.mode === 'words'
@@ -177,15 +177,17 @@ export default async function TestModePage({ params }: Props) {
             </p>
           </div>
 
-          <TypingTest initialConfig={config} />
+          <div className="w-full">
+            <TypingTest initialConfig={config} />
+          </div>
 
           {/* Other Modes & Blog Interlinks */}
-          <div className="mt-14 pt-8 border-t border-slate-200/80">
+          <div className="mt-14 pt-8 border-t border-slate-200/80 dark:border-slate-800">
             <h2
-              className="text-base font-bold text-slate-700 mb-4 flex items-center gap-2"
+              className="text-base font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2"
               style={{ fontFamily: 'var(--font-display)' }}
             >
-              <Zap size={16} className="text-sage-600" />
+              <Zap size={16} className="text-sage-600 dark:text-sage-400" />
               Switch to Another Test Mode
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-8">
@@ -193,21 +195,21 @@ export default async function TestModePage({ params }: Props) {
                 <Link
                   key={om}
                   href={`/test/${om}`}
-                  className="p-3 rounded-xl bg-white border border-slate-200/80 hover:border-sage-400 hover:shadow-xs transition-all text-center group"
+                  className="p-3 rounded-xl bg-white dark:bg-slate-850 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 hover:border-sage-400 dark:hover:border-sage-500 hover:shadow-xs transition-all text-center group"
                 >
-                  <div className="font-semibold text-xs text-slate-700 group-hover:text-sage-700">
+                  <div className="font-semibold text-xs text-slate-700 dark:text-slate-200 group-hover:text-sage-700 dark:group-hover:text-sage-300">
                     {MODE_LABELS[om]}
                   </div>
                 </Link>
               ))}
             </div>
 
-            <div className="card p-5 bg-gradient-to-r from-cream-light/60 to-white flex flex-col sm:flex-row items-center justify-between gap-4 border border-slate-200">
+            <div className="card p-5 bg-gradient-to-r from-cream-light/60 to-white dark:from-slate-900 dark:to-slate-950 flex flex-col sm:flex-row items-center justify-between gap-4 border border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-3">
-                <BookOpen size={20} className="text-lavender-dark flex-shrink-0" />
+                <BookOpen size={20} className="text-lavender-dark dark:text-lavender flex-shrink-0" />
                 <div>
-                  <h3 className="text-sm font-bold text-slate-800">Want to practice on real articles?</h3>
-                  <p className="text-xs text-slate-500">Read interesting guides on ergonomics & speed, then practice typing them.</p>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-white">Want to practice on real articles?</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Read interesting guides on ergonomics & speed, then practice typing them.</p>
                 </div>
               </div>
               <Link href="/blog" className="btn-primary text-xs py-2 px-4 flex-shrink-0">

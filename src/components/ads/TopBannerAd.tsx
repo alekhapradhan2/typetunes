@@ -15,7 +15,7 @@ export function TopBannerAd({
 }: TopBannerAdProps) {
   const { adLoaded, adUnfilled, insRef, pathname, isMounted } = useAdSense();
 
-  if (adUnfilled) return null;
+  if (adUnfilled || !isMounted) return null;
 
   return (
     <aside

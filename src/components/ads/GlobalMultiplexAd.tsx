@@ -6,12 +6,22 @@ const AD_CLIENT = "ca-pub-5823659147566885";
 // Multiplex ad slot — matching 'Global Multipllex' unit in Google AdSense
 const AD_SLOT = "3548072735";
 
+interface GlobalMultiplexAdProps {
+  slot?: string;
+  className?: string;
+}
+
 /**
  * GlobalMultiplexAd — auto-format multiplex ad that sits at the
  * bottom of every page just above the footer (like in Ollypedia).
  */
-export function GlobalMultiplexAd() {
+export function GlobalMultiplexAd({
+  slot = "2610156935",
+  className = "",
+}: GlobalMultiplexAdProps) {
   const { adLoaded, adUnfilled, insRef, pathname, isMounted } = useAdSense();
+
+  if (adUnfilled || !isMounted) return null;
 
   return (
     <div

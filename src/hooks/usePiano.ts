@@ -216,12 +216,12 @@ export function usePiano(): UsePianoReturn {
   function buildReverb(ctx: AudioContext): ConvolverNode {
     const convolver = ctx.createConvolver();
     const sampleRate = ctx.sampleRate;
-    const length = sampleRate * 1.2;
+    const length = Math.floor(sampleRate * 0.4);
     const ir = ctx.createBuffer(2, length, sampleRate);
     for (let c = 0; c < 2; c++) {
       const data = ir.getChannelData(c);
       for (let i = 0; i < length; i++) {
-        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2.5);
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 3.0);
       }
     }
     convolver.buffer = ir;

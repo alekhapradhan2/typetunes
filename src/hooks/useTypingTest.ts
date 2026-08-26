@@ -9,13 +9,14 @@ import type {
 } from '@/lib/types';
 import { generateTestText, getRandomQuote } from '@/lib/words';
 import { calcRawWpm, buildTestResult } from '@/lib/analytics';
-import { saveLocalResult, pushLocalHistoryId } from '@/lib/storage';
+import { saveLocalResult } from '@/lib/storage';
 
-
-// ─── Types ───────────────────────────────────────────────────────────────────
-
-interface UseTypingTestReturn {
+export interface UseTypingTestReturn {
   phase: TestPhase;
+  words: string[];
+  currentWordIndex: number;
+  currentInput: string;
+  wordHistory: string[];
   charStates: CharState[];
   cursorIndex: number;
   liveWpm: number;
@@ -29,17 +30,17 @@ interface UseTypingTestReturn {
   resultId: string | null;
 }
 
-// ─── Hook ─────────────────────────────────────────────────────────────────────
-
 export function useTypingTest(
   config: DifficultyConfig,
   onKeystroke?: (correct: boolean) => void,
   overrideText?: string
 ): UseTypingTestReturn {
   const [phase, setPhase] = useState<TestPhase>('idle');
-  const [text, setText] = useState('');
-  const [charStates, setCharStates] = useState<CharState[]>([]);
-  const [cursorIndex, setCursorIndex] = useState(0);
+  const [words, setWords] = useState<string[]>([]);
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [currentInput, setCurrentInput] = useState('');
+  const [wordHistory, setWordHistory] = useState<string[]>([]);
+
   const [liveWpm, setLiveWpm] = useState(0);
   const [liveAccuracy, setLiveAccuracy] = useState(100);
   const [timeLeft, setTimeLeft] = useState<number>(config.timeDuration ?? 60);
@@ -53,52 +54,68 @@ export function useTypingTest(
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const wpmIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // ── Build test text ───────────────────────────────────────────────────────
+  // Keep references to avoid re-render race conditions
+  const phaseRef = useRef<TestPhase>(phase);
+  phaseRef.current = phase;
 
-  const buildText = useCallback(() => {
+  const wordsRef = useRef<string[]>(words);
+  wordsRef.current = words;
+
+  const currentWordIndexRef = useRef<number>(currentWordIndex);
+  currentWordIndexRef.current = currentWordIndex;
+
+  const currentInputRef = useRef<string>(currentInput);
+  currentInputRef.current = currentInput;
+
+  const wordHistoryRef = useRef<string[]>(wordHistory);
+  wordHistoryRef.current = wordHistory;
+
+  // ── Build test words ───────────────────────────────────────────────────────
+
+  const buildWords = useCallback(() => {
     if (overrideText && overrideText.trim()) {
-      return overrideText.trim();
+      return overrideText.trim().split(/\s+/).filter(Boolean);
     }
-    let t = '';
+    let raw = '';
     if (config.useQuotes) {
-      t = getRandomQuote();
+      raw = getRandomQuote();
     } else {
       const count =
         config.mode === 'words'
           ? (config.wordCount ?? 50)
           : config.mode === 'time'
-          ? Math.ceil((config.timeDuration ?? 60) * 2.5) // ~2.5 words/sec buffer
-          : 200; // zen: lots of words
-      t = generateTestText({
+          ? Math.ceil((config.timeDuration ?? 60) * 3) // safe word buffer
+          : 250; // zen: endless words
+      raw = generateTestText({
         count,
         includePunctuation: config.includePunctuation,
         includeNumbers: config.includeNumbers,
       });
     }
-    return t;
-  }, [config, overrideText]);
-
-  // ── Initialize chars ──────────────────────────────────────────────────────
-
-  const initChars = useCallback(
-    (rawText: string) => {
-      setCharStates(
-        rawText.split('').map((ch) => ({ char: ch, status: 'pending' }))
-      );
-    },
-    []
-  );
+    return raw.split(/\s+/).filter(Boolean);
+  }, [
+    config.mode,
+    config.wordCount,
+    config.timeDuration,
+    config.includePunctuation,
+    config.includeNumbers,
+    config.useQuotes,
+    overrideText,
+  ]);
 
   // ── Reset ─────────────────────────────────────────────────────────────────
 
   const resetTest = useCallback(() => {
-    clearInterval(timerRef.current!);
-    clearInterval(wpmIntervalRef.current!);
+    if (timerRef.current) clearInterval(timerRef.current);
+    if (wpmIntervalRef.current) clearInterval(wpmIntervalRef.current);
     keystrokeEvents.current = [];
     wpmHistory.current = [];
     startTimestamp.current = 0;
+
     setPhase('idle');
-    setCursorIndex(0);
+    setCurrentWordIndex(0);
+    setCurrentInput('');
+    setWordHistory([]);
     setLiveWpm(0);
     setLiveAccuracy(100);
     setTimeLeft(config.timeDuration ?? 60);
@@ -106,19 +123,18 @@ export function useTypingTest(
     setWordsTyped(0);
     setResultId(null);
 
-    const t = buildText();
-    setText(t);
-    initChars(t);
-  }, [config, buildText, initChars]);
+    const initialWords = buildWords();
+    setWords(initialWords);
+  }, [config.timeDuration, buildWords]);
 
   // ── Finish ────────────────────────────────────────────────────────────────
 
   const finishTest = useCallback(() => {
-    clearInterval(timerRef.current!);
-    clearInterval(wpmIntervalRef.current!);
+    if (timerRef.current) clearInterval(timerRef.current);
+    if (wpmIntervalRef.current) clearInterval(wpmIntervalRef.current);
     setPhase('finished');
 
-    const elapsed = performance.now() - startTimestamp.current;
+    const elapsed = Math.max(500, performance.now() - startTimestamp.current);
     const result = buildTestResult(
       config,
       keystrokeEvents.current,
@@ -126,13 +142,12 @@ export function useTypingTest(
       elapsed
     );
 
-    // Persist locally immediately and to MongoDB
     saveLocalResult(result);
     fetch('/api/results', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(result),
-    }).catch(() => {}); // non-blocking
+    }).catch(() => {});
 
     setResultId(result.id);
   }, [config]);
@@ -140,17 +155,14 @@ export function useTypingTest(
   // ── Start ─────────────────────────────────────────────────────────────────
 
   const startTest = useCallback(() => {
-    if (phase === 'active') return;
+    if (phaseRef.current === 'active') return;
 
-    // Use current text if available, otherwise build
-    let currentText = text;
-    if (!currentText || currentText.trim().length === 0) {
-      currentText = buildText();
-      setText(currentText);
-      initChars(currentText);
+    let targetWords = wordsRef.current;
+    if (!targetWords || targetWords.length === 0) {
+      targetWords = buildWords();
+      setWords(targetWords);
     }
 
-    setCursorIndex(0);
     setPhase('active');
     startTimestamp.current = performance.now();
 
@@ -159,19 +171,18 @@ export function useTypingTest(
       setTimeLeft(duration);
       let remaining = duration;
 
-      clearInterval(timerRef.current!);
+      if (timerRef.current) clearInterval(timerRef.current);
       timerRef.current = setInterval(() => {
         remaining -= 1;
         setTimeLeft(remaining);
         if (remaining <= 0) {
-          clearInterval(timerRef.current!);
+          if (timerRef.current) clearInterval(timerRef.current);
           finishTest();
         }
       }, 1000);
     }
 
-    // WPM sampling every 500ms
-    clearInterval(wpmIntervalRef.current!);
+    if (wpmIntervalRef.current) clearInterval(wpmIntervalRef.current);
     wpmIntervalRef.current = setInterval(() => {
       const elapsed = performance.now() - startTimestamp.current;
       const sec = Math.floor(elapsed / 1000);
@@ -182,17 +193,16 @@ export function useTypingTest(
         setLiveWpm(wpm);
         setTimeElapsed(sec);
       }
-    }, 500);
-  }, [phase, text, config, buildText, initChars, finishTest]);
+    }, 400);
+  }, [config.mode, config.timeDuration, buildWords, finishTest]);
 
-  // ── Keyboard handler ──────────────────────────────────────────────────────
+  // ── Keyboard handler (Monkeytype exact behavior) ──────────────────────────
 
   const onKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (phase === 'idle') return;
-      if (phase === 'finished') return;
+      if (phaseRef.current === 'finished') return;
 
-      // Ignore modifier-only keys
+      // Ignore modifier keys
       if (
         e.key === 'Shift' ||
         e.key === 'Control' ||
@@ -201,108 +211,163 @@ export function useTypingTest(
         e.key === 'CapsLock' ||
         e.key === 'Tab' ||
         e.key === 'Escape'
-      )
+      ) {
         return;
+      }
+
+      // First keystroke starts test immediately
+      if (phaseRef.current === 'idle') {
+        if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) return;
+        startTest();
+      }
 
       e.preventDefault();
 
-      // Backspace
+      const activeWords = wordsRef.current;
+      const activeWordIdx = currentWordIndexRef.current;
+      const activeInput = currentInputRef.current;
+      const activeHistory = wordHistoryRef.current;
+      const currentWord = activeWords[activeWordIdx] || '';
+
+      // ── Handle Backspace
       if (e.key === 'Backspace') {
-        if (cursorIndex > 0) {
-          setCursorIndex((i) => i - 1);
-          setCharStates((prev) => {
-            const next = [...prev];
-            next[cursorIndex - 1] = { ...next[cursorIndex - 1], status: 'pending' };
-            return next;
-          });
+        if (activeInput.length > 0) {
+          const next = activeInput.slice(0, -1);
+          currentInputRef.current = next;
+          setCurrentInput(next);
+        } else if (activeWordIdx > 0) {
+          const prevIndex = activeWordIdx - 1;
+          const prevTyped = activeHistory[prevIndex] || '';
+          const prevTarget = activeWords[prevIndex] || '';
+          if (prevTyped !== prevTarget) {
+            const nextHistory = activeHistory.slice(0, -1);
+            wordHistoryRef.current = nextHistory;
+            currentWordIndexRef.current = prevIndex;
+            currentInputRef.current = prevTyped;
+            setCurrentWordIndex(prevIndex);
+            setCurrentInput(prevTyped);
+            setWordHistory(nextHistory);
+          }
         }
         return;
       }
 
-      if (cursorIndex >= text.length) return;
+      // ── Handle Space (Submit current word & move to next)
+      if (e.key === ' ') {
+        if (activeInput.length === 0) return; // ignore empty spaces
 
-      const expected = text[cursorIndex];
-      const correct = e.key === expected;
-      const timestamp = performance.now() - startTimestamp.current;
-      const wpmAtMoment = liveWpm;
+        const isWordFullyCorrect = activeInput === currentWord;
+        onKeystroke?.(isWordFullyCorrect);
 
-      const event: KeystrokeEvent = {
-        char: e.key,
-        expected,
-        correct,
-        timestamp,
-        wpmAtMoment,
-      };
-      keystrokeEvents.current.push(event);
+        const newHistory = [...activeHistory, activeInput];
+        const nextWordIndex = activeWordIdx + 1;
+        wordHistoryRef.current = newHistory;
+        currentWordIndexRef.current = nextWordIndex;
+        currentInputRef.current = '';
 
-      // Update accuracy live
-      const totalKeys = keystrokeEvents.current.length;
-      const correctKeys = keystrokeEvents.current.filter((k) => k.correct).length;
-      setLiveAccuracy(Math.round((correctKeys / totalKeys) * 100));
+        setWordHistory(newHistory);
+        setCurrentWordIndex(nextWordIndex);
+        setCurrentInput('');
+        setWordsTyped(nextWordIndex);
 
-      // Update char state
-      setCharStates((prev) => {
-        const next = [...prev];
-        next[cursorIndex] = {
-          ...next[cursorIndex],
-          status: correct ? 'correct' : 'incorrect',
-        };
-        return next;
-      });
+        // Check completion conditions
+        if (config.mode === 'words' && nextWordIndex >= (config.wordCount ?? 50)) {
+          finishTest();
+          return;
+        }
 
-      const nextIndex = cursorIndex + 1;
-      setCursorIndex(nextIndex);
-
-      // Count completed words
-      if (e.key === ' ' || nextIndex === text.length) {
-        setWordsTyped((w) => w + 1);
+        if (nextWordIndex >= activeWords.length) {
+          if (config.mode === 'zen' || config.mode === 'time') {
+            const extra = generateTestText({
+              count: 30,
+              includePunctuation: config.includePunctuation,
+              includeNumbers: config.includeNumbers,
+            }).split(/\s+/).filter(Boolean);
+            const combined = [...activeWords, ...extra];
+            wordsRef.current = combined;
+            setWords(combined);
+          } else {
+            finishTest();
+            return;
+          }
+        }
+        return;
       }
 
-      // Trigger audio callback
-      onKeystroke?.(correct);
+      // ── Handle Regular Character
+      if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const expectedChar = currentWord[activeInput.length];
+        const isCorrect = e.key === expectedChar;
 
-      // Finish conditions
-      if (config.mode === 'words' && nextIndex === text.length) {
-        finishTest();
-      }
-      if (config.mode === 'zen' && nextIndex === text.length) {
-        // Zen: generate more text seamlessly
-        const extra = generateTestText({
-          count: 50,
-          includePunctuation: config.includePunctuation,
-          includeNumbers: config.includeNumbers,
+        const timestamp = performance.now() - (startTimestamp.current || performance.now());
+        keystrokeEvents.current.push({
+          char: e.key,
+          expected: expectedChar || '',
+          correct: isCorrect,
+          timestamp,
+          wpmAtMoment: liveWpm,
         });
-        setText((t) => t + ' ' + extra);
-        setCharStates((prev) => [
-          ...prev,
-          { char: ' ', status: 'pending' },
-          ...extra.split('').map((ch) => ({ char: ch, status: 'pending' as const })),
-        ]);
+
+        // Update live accuracy
+        const total = keystrokeEvents.current.length;
+        const correctCount = keystrokeEvents.current.filter((k) => k.correct).length;
+        setLiveAccuracy(Math.round((correctCount / total) * 100));
+
+        onKeystroke?.(isCorrect);
+        const nextInput = activeInput + e.key;
+        currentInputRef.current = nextInput;
+        setCurrentInput(nextInput);
+
+        // Word mode early finish check on last character
+        if (
+          config.mode === 'words' &&
+          activeWordIdx === (config.wordCount ?? 50) - 1 &&
+          nextInput === currentWord
+        ) {
+          finishTest();
+        }
       }
     },
-    [phase, cursorIndex, text, liveWpm, config, onKeystroke, finishTest]
+    [
+      config.mode,
+      config.wordCount,
+      config.includePunctuation,
+      config.includeNumbers,
+      liveWpm,
+      onKeystroke,
+      startTest,
+      finishTest,
+    ]
   );
 
-  // ── Init on mount ─────────────────────────────────────────────────────────
+  const charStates: CharState[] = [];
+  const cursorIndex = 0;
+
+  // ── Init on mount or when mode/config changes ────────────────────────────
 
   useEffect(() => {
-    const t = buildText();
-    setText(t);
-    initChars(t);
-    setTimeLeft(config.timeDuration ?? 60);
-  }, [buildText, initChars, config.timeDuration]);
+    if (phaseRef.current === 'idle') {
+      const initialWords = buildWords();
+      setWords(initialWords);
+      setTimeLeft(config.timeDuration ?? 60);
+    }
+  }, [buildWords, config.timeDuration]);
 
   // ── Cleanup ───────────────────────────────────────────────────────────────
 
   useEffect(() => {
     return () => {
-      clearInterval(timerRef.current!);
-      clearInterval(wpmIntervalRef.current!);
+      if (timerRef.current) clearInterval(timerRef.current);
+      if (wpmIntervalRef.current) clearInterval(wpmIntervalRef.current);
     };
   }, []);
 
   return {
     phase,
+    words,
+    currentWordIndex,
+    currentInput,
+    wordHistory,
     charStates,
     cursorIndex,
     liveWpm,

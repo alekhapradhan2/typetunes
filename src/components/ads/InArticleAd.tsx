@@ -21,7 +21,7 @@ export function InArticleAd({
 }: InArticleAdProps) {
   const { adLoaded, adUnfilled, insRef, pathname, isMounted } = useAdSense();
 
-  if (adUnfilled) return null;
+  if (adUnfilled || !isMounted) return null;
 
   return (
     <div
