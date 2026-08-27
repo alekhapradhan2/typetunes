@@ -124,8 +124,7 @@ html.dark ins.adsbygoogle iframe {
 
 html.dark aside[aria-label*="advertisement"],
 html.dark aside[aria-label*="Advertisement"],
-html.dark aside[aria-label*="Top Advertisement"],
-html.dark aside[aria-label*="skyscraper advertisement"] {
+html.dark aside[aria-label*="Top Advertisement"] {
   background: transparent !important;
   background-color: transparent !important;
 }
